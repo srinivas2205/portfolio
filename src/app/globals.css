@@ -4,10 +4,10 @@
    Design tokens — a warm dark canvas with vibrant gradients
    =========================================================== */
 :root {
-  --background: #0b0713;
-  --background-soft: #120b1f;
+  --background: #1a1a1a;
+  --background-soft: #222222;
   --foreground: #f5f3ff;
-  --muted: #a99fc4;
+  --muted: #b8b8c4;
   --border: rgba(255, 255, 255, 0.08);
   --card: rgba(255, 255, 255, 0.04);
 }
