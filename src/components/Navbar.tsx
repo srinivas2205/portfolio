@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { AnimatePresence, motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { profile, navLinks } from "@/data/portfolio";
 
@@ -58,8 +59,14 @@ export default function Navbar() {
           className="group flex items-center gap-2.5"
           onClick={() => setOpen(false)}
         >
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-fuchsia-500 via-purple-500 to-indigo-500 text-sm font-bold text-white shadow-lg shadow-fuchsia-500/30 transition-transform group-hover:scale-110">
-            {profile.initials}
+          <span className="relative block h-9 w-9 overflow-hidden rounded-xl shadow-lg shadow-fuchsia-500/30 transition-transform group-hover:scale-110">
+            <Image
+              src="/IMG_20260422_142319422.jpg"
+              alt={profile.name}
+              fill
+              sizes="36px"
+              className="object-cover"
+            />
           </span>
           <span className="hidden text-sm font-semibold tracking-tight sm:block">
             {profile.name}

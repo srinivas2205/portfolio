@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { profile } from "@/data/portfolio";
 
@@ -33,12 +34,17 @@ export default function Hero() {
         initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.85 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.7, ease }}
-        className="ring-spin relative mb-8 grid h-28 w-28 place-items-center rounded-full sm:h-32 sm:w-32"
+        className="ring-spin relative mb-8 h-28 w-28 sm:h-32 sm:w-32"
       >
-        <div className="grid h-full w-full place-items-center rounded-full bg-[var(--background)]">
-          <span className="bg-gradient-to-br from-fuchsia-400 via-purple-400 to-indigo-400 bg-clip-text text-4xl font-bold text-transparent sm:text-5xl">
-            {profile.initials}
-          </span>
+        <div className="relative h-full w-full overflow-hidden rounded-full bg-[var(--background)] ring-4 ring-[var(--background)]">
+          <Image
+            src="/IMG_20260422_142319422.jpg"
+            alt={`${profile.name} — ${profile.roles[0]}`}
+            fill
+            priority
+            sizes="128px"
+            className="object-cover"
+          />
         </div>
       </motion.div>
 

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { profile, navLinks } from "@/data/portfolio";
 
 export default function Footer() {
@@ -10,8 +11,14 @@ export default function Footer() {
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-8 text-center">
         {/* Brand */}
         <a href="#top" className="flex items-center gap-2.5">
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-fuchsia-500 via-purple-500 to-indigo-500 text-sm font-bold text-white">
-            {profile.initials}
+          <span className="relative block h-9 w-9 overflow-hidden rounded-xl bg-gradient-to-br from-fuchsia-500 via-purple-500 to-indigo-500">
+            <Image
+              src="/IMG_20260422_142319422.jpg"
+              alt={profile.name}
+              fill
+              sizes="36px"
+              className="object-cover"
+            />
           </span>
           <span className="text-sm font-semibold">{profile.name}</span>
         </a>
