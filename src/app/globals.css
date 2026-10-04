@@ -10,6 +10,10 @@
   --muted: #b8b8c4;
   --border: rgba(255, 255, 255, 0.08);
   --card: rgba(255, 255, 255, 0.04);
+  --page-gutter: clamp(1.25rem, 4vw, 2rem);
+  --section-space: clamp(5rem, 10vw, 7rem);
+  --focus-ring: #f0abfc;
+  --focus-ring-soft: rgb(168 85 247 / 0.24);
 }
 
 @theme inline {
@@ -23,16 +27,60 @@
 }
 
 html {
+  min-height: 100%;
+  color-scheme: dark;
   scroll-behavior: smooth;
-  scroll-padding-top: 6rem;
+  scroll-padding-top: calc(clamp(4.5rem, 8vw, 6rem) + env(safe-area-inset-top));
 }
 
 body {
+  min-height: 100%;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  font-size: clamp(0.9375rem, 0.25vw + 0.9rem, 1rem);
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Account for notches, home indicators, and compact keyboard viewports. */
+body > header.fixed {
+  padding-top: max(clamp(0.75rem, 1.5vw, 1rem), env(safe-area-inset-top));
+  padding-right: max(1rem, env(safe-area-inset-right));
+  padding-left: max(1rem, env(safe-area-inset-left));
+}
+
+#top {
+  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
+  padding-top: max(clamp(6.5rem, 14vw, 8rem), env(safe-area-inset-top));
+  padding-bottom: max(clamp(4rem, 8vw, 5rem), env(safe-area-inset-bottom));
+}
+
+#mobile-navigation {
+  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
+  padding-top: max(0.75rem, env(safe-area-inset-top));
+  padding-right: max(0.75rem, env(safe-area-inset-right));
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  padding-left: max(0.75rem, env(safe-area-inset-left));
+  overscroll-behavior: contain;
+}
+
+#mobile-navigation > div {
+  min-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  min-height: calc(100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  min-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+}
+
+footer {
+  padding-bottom: max(3rem, env(safe-area-inset-bottom));
 }
 
 /* Scrollbar */
@@ -52,6 +100,32 @@ body {
 ::selection {
   background: #a855f7;
   color: #fff;
+}
+
+/* A consistent keyboard-visible focus treatment for links, controls, and fields. */
+:where(a, button, input, textarea, select, summary, [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px var(--focus-ring-soft);
+}
+
+:where(a, button, input, textarea, select, summary, [tabindex]:not([tabindex="-1"])):focus:not(:focus-visible) {
+  outline: none;
+}
+
+:where(a, button) {
+  -webkit-tap-highlight-color: rgb(168 85 247 / 0.2);
+}
+
+:where(button, a[href]) {
+  touch-action: manipulation;
+}
+
+@media (max-width: 48rem) {
+  /* Prevent iOS from zooming the page when a form control receives focus. */
+  :where(input, textarea, select) {
+    font-size: 1rem;
+  }
 }
 
 /* ===========================================================
@@ -76,13 +150,14 @@ body {
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
 
   .eyebrow {
     font-family: var(--font-mono);
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    font-size: 0.72rem;
+    font-size: clamp(0.66rem, 1.2vw, 0.72rem);
     font-weight: 600;
   }
 
@@ -102,6 +177,33 @@ body {
     z-index: -1;
     animation: spin 6s linear infinite;
   }
+}
+
+/* Shared responsive primitives. Framer Motion only animates opacity/transform. */
+.section-shell {
+  padding-inline: var(--page-gutter);
+  padding-block: var(--section-space);
+  scroll-margin-top: calc(clamp(4.5rem, 8vw, 6rem) + env(safe-area-inset-top));
+}
+
+.section-header {
+  margin-block-end: clamp(2.5rem, 6vw, 3rem);
+}
+
+.section-title {
+  font-size: clamp(1.875rem, 5vw, 3rem);
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+.section-subtitle {
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  line-height: 1.7;
+}
+
+.motion-reveal {
+  backface-visibility: hidden;
+  will-change: opacity, transform;
 }
 
 @keyframes spin {
@@ -148,13 +250,48 @@ body {
   animation: marquee 30s linear infinite;
 }
 
+@media (hover: hover) {
+  .marquee-track:hover {
+    animation-play-state: paused;
+  }
+}
+
+@media (max-width: 40rem) {
+  .glass {
+    backdrop-filter: blur(9px);
+    -webkit-backdrop-filter: blur(9px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   *,
   *::before,
   *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+    transition-delay: 0s !important;
     scroll-behavior: auto !important;
+  }
+
+  .animate-float,
+  .animate-float-slow,
+  .animate-marquee,
+  .animate-ping,
+  .ring-spin::before,
+  .motion-reveal {
+    animation: none !important;
+    will-change: auto;
+  }
+}
+
+@media (forced-colors: active) {
+  :where(a, button, input, textarea, select, summary, [tabindex]:not([tabindex="-1"])):focus-visible {
+    outline: 2px solid CanvasText;
+    box-shadow: none;
   }
 }

@@ -20,7 +20,7 @@ export default function Hero() {
         initial={reduce ? { opacity: 0 } : { opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease }}
-        className="mb-8 inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs font-medium text-[var(--muted)]"
+        className="mb-8 inline-flex max-w-full flex-wrap items-center justify-center gap-x-2 gap-y-1 rounded-full glass px-3 py-1.5 text-center text-xs font-medium leading-5 text-[var(--muted)] sm:px-4"
       >
         <span className="relative flex h-2 w-2">
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
@@ -34,7 +34,7 @@ export default function Hero() {
         initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.85 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.7, ease }}
-        className="ring-spin relative mb-8 h-28 w-28 sm:h-32 sm:w-32"
+        className="ring-spin relative mb-7 h-28 w-28 sm:mb-8 sm:h-32 sm:w-32"
       >
         <div className="relative h-full w-full overflow-hidden rounded-full bg-[var(--background)] ring-4 ring-[var(--background)]">
           <Image
@@ -53,7 +53,7 @@ export default function Hero() {
         initial={reduce ? { opacity: 0 } : { opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.1, ease }}
-        className="text-balance text-5xl font-bold tracking-tight sm:text-7xl md:text-8xl"
+        className="max-w-full text-balance px-2 text-[clamp(2.5rem,11vw,4.5rem)] font-bold leading-[0.98] tracking-tight sm:px-0 sm:text-7xl md:text-8xl"
       >
         <span className="text-gradient">{profile.name}</span>
       </motion.h1>
@@ -63,9 +63,9 @@ export default function Hero() {
         initial={reduce ? { opacity: 0 } : { opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.2, ease }}
-        className="mt-5 h-8 overflow-hidden"
+        className="mt-5 flex min-h-8 max-w-full items-center justify-center overflow-hidden px-2"
       >
-        <RoleRotator roles={profile.roles} />
+        <RoleRotator roles={profile.roles} reduce={reduce === true} />
       </motion.div>
 
       {/* Headline */}
@@ -83,18 +83,18 @@ export default function Hero() {
         initial={reduce ? { opacity: 0 } : { opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.4, ease }}
-        className="mt-10 flex flex-col items-center gap-3 sm:flex-row"
+        className="mt-10 flex w-full max-w-xs flex-col items-stretch gap-3 sm:w-auto sm:max-w-none sm:flex-row sm:items-center"
       >
         <a
           href="#projects"
-          className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-fuchsia-500 via-purple-500 to-indigo-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-fuchsia-500/30 transition-transform hover:scale-105"
+          className="group inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-fuchsia-500 via-purple-500 to-indigo-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-fuchsia-500/30 transition-transform hover:scale-105"
         >
           View my work
           <span className="transition-transform group-hover:translate-x-1">→</span>
         </a>
         <a
           href="#contact"
-          className="inline-flex items-center gap-2 rounded-xl glass px-6 py-3 text-sm font-semibold transition-colors hover:bg-white/10"
+          className="inline-flex items-center justify-center gap-2 rounded-xl glass px-6 py-3 text-sm font-semibold transition-colors hover:bg-white/10"
         >
           Contact me
         </a>
@@ -105,7 +105,7 @@ export default function Hero() {
         initial={reduce ? { opacity: 0 } : { opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.5, ease }}
-        className="mt-12 flex items-center gap-6 text-sm text-[var(--muted)]"
+        className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-[var(--muted)] sm:mt-12"
       >
         <a
           href={profile.github}
@@ -128,7 +128,7 @@ export default function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2 }}
-        className="absolute bottom-6 left-1/2 -translate-x-1/2"
+        className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 sm:block"
       >
         <motion.div
           animate={reduce ? {} : { y: [0, 8, 0] }}
@@ -143,15 +143,17 @@ export default function Hero() {
 }
 
 /* Cycles through role strings with a vertical slide */
-function RoleRotator({ roles }: { roles: string[] }) {
+function RoleRotator({ roles, reduce }: { roles: string[]; reduce: boolean }) {
   const [idx, setIdx] = useState(0);
   useEffect(() => {
+    if (reduce || roles.length < 2) return;
+
     const t = setInterval(() => setIdx((i) => (i + 1) % roles.length), 2800);
     return () => clearInterval(t);
-  }, [roles.length]);
+  }, [reduce, roles.length]);
 
   return (
-    <div className="relative flex h-8 items-center justify-center overflow-hidden">
+    <div className="relative flex min-h-8 max-w-full items-center justify-center overflow-hidden">
       <AnimatePresence mode="wait">
         <motion.span
           key={idx}
@@ -159,7 +161,7 @@ function RoleRotator({ roles }: { roles: string[] }) {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.4, ease }}
-          className="text-lg font-semibold text-white/90 sm:text-xl"
+          className="max-w-full text-center text-base font-semibold leading-7 text-white/90 sm:text-xl"
         >
           {roles[idx]}
         </motion.span>

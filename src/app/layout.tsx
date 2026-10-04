@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { profile } from "@/data/portfolio";
@@ -33,6 +33,14 @@ export const metadata: Metadata = {
     description: profile.headline,
     type: "website",
   },
+};
+
+export const viewport: Viewport = {
+  colorScheme: "dark",
+  initialScale: 1,
+  viewportFit: "cover",
+  width: "device-width",
+  themeColor: "#1a1a1a",
 };
 
 export default function RootLayout({
