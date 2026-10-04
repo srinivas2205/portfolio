@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { m, AnimatePresence, useReducedMotion } from "framer-motion";
 import { profile } from "@/data/portfolio";
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -16,7 +16,7 @@ export default function Hero() {
       className="relative mx-auto flex min-h-screen w-full max-w-6xl flex-col items-center justify-center px-5 pt-28 pb-16 text-center sm:px-8"
     >
       {/* Availability pill */}
-      <motion.div
+      <m.div
         initial={reduce ? { opacity: 0 } : { opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease }}
@@ -27,10 +27,10 @@ export default function Hero() {
           <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
         </span>
         Open to opportunities · {profile.location}
-      </motion.div>
+      </m.div>
 
       {/* Portrait */}
-      <motion.div
+      <m.div
         initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.85 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.7, ease }}
@@ -38,7 +38,7 @@ export default function Hero() {
       >
         <div className="relative h-full w-full overflow-hidden rounded-full bg-[var(--background)] ring-4 ring-[var(--background)]">
           <Image
-            src="/IMG_20260422_142319422.jpg"
+            src="/profile.webp"
             alt={`${profile.name} — ${profile.roles[0]}`}
             fill
             priority
@@ -46,40 +46,40 @@ export default function Hero() {
             className="object-cover"
           />
         </div>
-      </motion.div>
+      </m.div>
 
       {/* Name */}
-      <motion.h1
+      <m.h1
         initial={reduce ? { opacity: 0 } : { opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.1, ease }}
         className="max-w-full text-balance px-2 text-[clamp(2.5rem,11vw,4.5rem)] font-bold leading-[0.98] tracking-tight sm:px-0 sm:text-7xl md:text-8xl"
       >
         <span className="text-gradient">{profile.name}</span>
-      </motion.h1>
+      </m.h1>
 
       {/* Rotating roles */}
-      <motion.div
+      <m.div
         initial={reduce ? { opacity: 0 } : { opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.2, ease }}
         className="mt-5 flex min-h-8 max-w-full items-center justify-center overflow-hidden px-2"
       >
         <RoleRotator roles={profile.roles} reduce={reduce === true} />
-      </motion.div>
+      </m.div>
 
       {/* Headline */}
-      <motion.p
+      <m.p
         initial={reduce ? { opacity: 0 } : { opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.3, ease }}
         className="mt-6 max-w-2xl text-pretty text-base leading-relaxed text-[var(--muted)] sm:text-lg"
       >
         {profile.headline}
-      </motion.p>
+      </m.p>
 
       {/* CTAs */}
-      <motion.div
+      <m.div
         initial={reduce ? { opacity: 0 } : { opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.4, ease }}
@@ -98,10 +98,10 @@ export default function Hero() {
         >
           Contact me
         </a>
-      </motion.div>
+      </m.div>
 
       {/* Social row */}
-      <motion.div
+      <m.div
         initial={reduce ? { opacity: 0 } : { opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.5, ease }}
@@ -121,23 +121,23 @@ export default function Hero() {
         >
           Email ↗
         </a>
-      </motion.div>
+      </m.div>
 
       {/* Scroll cue */}
-      <motion.div
+      <m.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2 }}
         className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 sm:block"
       >
-        <motion.div
+        <m.div
           animate={reduce ? {} : { y: [0, 8, 0] }}
           transition={{ duration: 1.8, repeat: Infinity }}
           className="flex h-9 w-5 items-start justify-center rounded-full border border-white/20 p-1"
         >
           <span className="h-2 w-1 rounded-full bg-white/60" />
-        </motion.div>
-      </motion.div>
+        </m.div>
+      </m.div>
     </section>
   );
 }
@@ -155,7 +155,7 @@ function RoleRotator({ roles, reduce }: { roles: string[]; reduce: boolean }) {
   return (
     <div className="relative flex min-h-8 max-w-full items-center justify-center overflow-hidden">
       <AnimatePresence mode="wait">
-        <motion.span
+        <m.span
           key={idx}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -164,7 +164,7 @@ function RoleRotator({ roles, reduce }: { roles: string[]; reduce: boolean }) {
           className="max-w-full text-center text-base font-semibold leading-7 text-white/90 sm:text-xl"
         >
           {roles[idx]}
-        </motion.span>
+        </m.span>
       </AnimatePresence>
     </div>
   );

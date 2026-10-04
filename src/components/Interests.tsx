@@ -1,7 +1,7 @@
 "use client";
 
 import { Section, SectionHeader, Reveal, StaggerGroup, staggerItem } from "./Primitives";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { interests, hobbies, languages } from "@/data/portfolio";
 
 export default function Interests() {
@@ -21,7 +21,7 @@ export default function Interests() {
       <Reveal className="mb-8">
         <div className="flex flex-wrap gap-2.5">
           {interests.map((interest, i) => (
-            <motion.span
+            <m.span
               key={interest}
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -31,7 +31,7 @@ export default function Interests() {
               className="cursor-default rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white/85"
             >
               {interest}
-            </motion.span>
+            </m.span>
           ))}
         </div>
       </Reveal>
@@ -45,7 +45,7 @@ export default function Interests() {
             </h3>
             <StaggerGroup className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {hobbies.map((h) => (
-                <motion.div
+                <m.div
                   key={h.label}
                   variants={staggerItem}
                   whileHover={{ scale: 1.03 }}
@@ -57,7 +57,7 @@ export default function Interests() {
                   <span className="text-sm font-medium text-white/90">
                     {h.label}
                   </span>
-                </motion.div>
+                </m.div>
               ))}
             </StaggerGroup>
           </div>
@@ -71,7 +71,7 @@ export default function Interests() {
             </h3>
             <StaggerGroup className="flex flex-col gap-3">
               {languages.map((lang) => (
-                <motion.div
+                <m.div
                   key={lang.label}
                   variants={staggerItem}
                   className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 p-3.5"
@@ -88,7 +88,7 @@ export default function Interests() {
                   >
                     {lang.level}
                   </span>
-                </motion.div>
+                </m.div>
               ))}
             </StaggerGroup>
           </div>

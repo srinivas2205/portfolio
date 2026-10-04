@@ -1,5 +1,3 @@
-"use client";
-
 const WORDS = [
   "React",
   "Next.js",

@@ -1,7 +1,7 @@
 "use client";
 
 import { Section, SectionHeader, Reveal, StaggerGroup, staggerItem } from "./Primitives";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { about, education, profile, goals } from "@/data/portfolio";
 
 export default function About() {
@@ -40,14 +40,14 @@ export default function About() {
             </h3>
             <StaggerGroup className="flex flex-col gap-3">
               {goals.map((g) => (
-                <motion.li
+                <m.li
                   key={g}
                   variants={staggerItem}
                   className="flex items-start gap-3 text-sm text-white/80"
                 >
                   <span className="mt-1 text-fuchsia-400">▹</span>
                   {g}
-                </motion.li>
+                </m.li>
               ))}
             </StaggerGroup>
           </div>

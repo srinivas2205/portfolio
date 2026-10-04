@@ -1,7 +1,7 @@
 "use client";
 
 import { Section, SectionHeader, Reveal, StaggerGroup, staggerItem } from "./Primitives";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { currentlyLearning } from "@/data/portfolio";
 
 export default function Learning() {
@@ -25,7 +25,7 @@ export default function Learning() {
             </h3>
             <StaggerGroup className="grid gap-3 sm:grid-cols-2">
               {currentlyLearning.map((item, i) => (
-                <motion.div
+                <m.div
                   key={item}
                   variants={staggerItem}
                   className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-3.5"
@@ -34,7 +34,7 @@ export default function Learning() {
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <span className="text-sm font-medium text-white/90">{item}</span>
-                </motion.div>
+                </m.div>
               ))}
             </StaggerGroup>
           </div>

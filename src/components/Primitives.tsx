@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion, type Variants } from "framer-motion";
+import { m, useReducedMotion, type Variants } from "framer-motion";
 import {
   Children,
   cloneElement,
@@ -24,7 +24,7 @@ export function Reveal({
   const reduced = reduce === true;
 
   return (
-    <motion.div
+    <m.div
       className={`motion-reveal ${className ?? ""}`.trim()}
       initial={reduced ? false : { opacity: 0, y }}
       whileInView={reduced ? { opacity: 1 } : { opacity: 1, y: 0 }}
@@ -36,7 +36,7 @@ export function Reveal({
       }}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -89,7 +89,7 @@ export function StaggerGroup({
     : children;
 
   return (
-    <motion.div
+    <m.div
       className={`stagger-group ${className ?? ""}`.trim()}
       variants={reduced ? reducedStaggerContainer : staggerContainer}
       initial={reduced ? false : "hidden"}
@@ -97,7 +97,7 @@ export function StaggerGroup({
       viewport={{ once: true, amount: 0.18, margin: "0px 0px -10% 0px" }}
     >
       {staggeredChildren}
-    </motion.div>
+    </m.div>
   );
 }
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { Section, SectionHeader, Reveal, StaggerGroup, staggerItem } from "./Primitives";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { projects, projectPipeline, type Project } from "@/data/portfolio";
 
 const STATUS_STYLES: Record<string, string> = {
@@ -45,7 +45,7 @@ export default function Projects() {
             </div>
             <StaggerGroup className="grid gap-3 sm:grid-cols-2">
               {projectPipeline.map((p) => (
-                <motion.div
+                <m.div
                   key={p.title}
                   variants={staggerItem}
                   className="group flex items-center justify-between rounded-2xl border border-dashed border-white/15 bg-white/[0.03] p-4 transition-colors hover:border-fuchsia-400/40 hover:bg-white/[0.06]"
@@ -56,7 +56,7 @@ export default function Projects() {
                   <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wide text-[var(--muted)]">
                     {p.status}
                   </span>
-                </motion.div>
+                </m.div>
               ))}
             </StaggerGroup>
 
@@ -85,7 +85,7 @@ export default function Projects() {
 
 function ProjectCard({ project }: { project: Project }) {
   return (
-    <motion.article
+    <m.article
       variants={staggerItem}
       whileHover={{ y: -6 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
@@ -141,6 +141,6 @@ function ProjectCard({ project }: { project: Project }) {
           </a>
         )}
       </div>
-    </motion.article>
+    </m.article>
   );
 }

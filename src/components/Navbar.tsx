@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import {
   AnimatePresence,
-  motion,
+  m,
   useMotionValueEvent,
   useReducedMotion,
   useScroll,
@@ -120,7 +120,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <motion.header
+    <m.header
       initial={{ y: -80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
@@ -130,7 +130,7 @@ export default function Navbar() {
         aria-hidden={open}
         className={`flex w-full max-w-5xl items-center justify-between rounded-2xl px-4 py-2.5 transition-all duration-300 sm:px-5 ${
           scrolled
-            ? "glass shadow-lg shadow-black/30"
+            ? "glass glass-blur shadow-lg shadow-black/30"
             : "border border-transparent bg-transparent"
         }`}
       >
@@ -142,7 +142,7 @@ export default function Navbar() {
         >
           <span className="relative block h-9 w-9 overflow-hidden rounded-xl shadow-lg shadow-fuchsia-500/30 transition-transform group-hover:scale-110">
             <Image
-              src="/IMG_20260422_142319422.jpg"
+              src="/profile.webp"
               alt={profile.name}
               fill
               sizes="36px"
@@ -168,7 +168,7 @@ export default function Navbar() {
                 }`}
               >
                 {active === link.href && (
-                  <motion.span
+                   <m.span
                     layoutId="nav-active"
                     className="absolute inset-0 -z-10 rounded-lg bg-white/10"
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
@@ -199,17 +199,17 @@ export default function Navbar() {
             className="grid h-10 w-10 place-items-center rounded-xl glass focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300 md:hidden"
           >
             <div aria-hidden="true" className="space-y-1.5">
-              <motion.span
+               <m.span
                 animate={open ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
                 transition={{ duration: prefersReducedMotion ? 0 : 0.2 }}
                 className="block h-0.5 w-5 rounded bg-white"
               />
-              <motion.span
+               <m.span
                 animate={open ? { opacity: 0 } : { opacity: 1 }}
                 transition={{ duration: prefersReducedMotion ? 0 : 0.15 }}
                 className="block h-0.5 w-5 rounded bg-white"
               />
-              <motion.span
+               <m.span
                 animate={open ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
                 transition={{ duration: prefersReducedMotion ? 0 : 0.2 }}
                 className="block h-0.5 w-5 rounded bg-white"
@@ -222,7 +222,7 @@ export default function Navbar() {
       {/* Mobile menu */}
       <AnimatePresence initial={false}>
         {open && (
-          <motion.div
+          <m.div
             ref={menuRef}
             id="mobile-navigation"
             role="dialog"
@@ -235,9 +235,9 @@ export default function Navbar() {
             onClick={(event) => {
               if (event.target === event.currentTarget) setOpen(false);
             }}
-            className="fixed inset-0 z-40 overflow-y-auto bg-[var(--background)]/95 px-3 pb-4 pt-3 backdrop-blur-md sm:px-4 md:hidden"
+            className="fixed inset-0 z-40 overflow-y-auto bg-[var(--background)]/98 px-3 pb-4 pt-3 sm:px-4 md:hidden"
           >
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: prefersReducedMotion ? 0 : -12 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: prefersReducedMotion ? 0 : -12 }}
@@ -261,7 +261,7 @@ export default function Navbar() {
 
               <ul className="flex flex-1 flex-col justify-center gap-2 py-6">
                 {navLinks.map((link, i) => (
-                  <motion.li
+                  <m.li
                     key={link.href}
                     initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -281,9 +281,9 @@ export default function Navbar() {
                     >
                       {link.label}
                     </a>
-                  </motion.li>
+                  </m.li>
                 ))}
-                <motion.li
+                <m.li
                   initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{
@@ -299,12 +299,12 @@ export default function Navbar() {
                   >
                     Get in touch
                   </a>
-                </motion.li>
+                </m.li>
               </ul>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
         )}
       </AnimatePresence>
-    </motion.header>
+    </m.header>
   );
 }

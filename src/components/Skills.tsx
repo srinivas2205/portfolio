@@ -1,7 +1,7 @@
 "use client";
 
 import { Section, SectionHeader, StaggerGroup, staggerItem } from "./Primitives";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { skills } from "@/data/portfolio";
 
 export default function Skills() {
@@ -19,7 +19,7 @@ export default function Skills() {
 
       <StaggerGroup className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {skills.map((group) => (
-          <motion.div
+          <m.div
             key={group.category}
             variants={staggerItem}
             whileHover={{ y: -6 }}
@@ -56,7 +56,7 @@ export default function Skills() {
                 </li>
               ))}
             </ul>
-          </motion.div>
+          </m.div>
         ))}
       </StaggerGroup>
     </Section>

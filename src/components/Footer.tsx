@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import { profile, navLinks } from "@/data/portfolio";
 
@@ -13,7 +11,7 @@ export default function Footer() {
         <a href="#top" className="flex items-center gap-2.5">
           <span className="relative block h-9 w-9 overflow-hidden rounded-xl bg-gradient-to-br from-fuchsia-500 via-purple-500 to-indigo-500">
             <Image
-              src="/IMG_20260422_142319422.jpg"
+              src="/profile.webp"
               alt={profile.name}
               fill
               sizes="36px"

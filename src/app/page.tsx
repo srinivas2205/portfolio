@@ -9,24 +9,26 @@ import Projects from "@/components/Projects";
 import Interests from "@/components/Interests";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
-import { MotionConfig } from "framer-motion";
+import { domAnimation, LazyMotion, MotionConfig } from "framer-motion";
 
 export default function Home() {
   return (
-    <MotionConfig reducedMotion="user">
-      <Background />
-      <Navbar />
-      <main className="flex-1">
-        <Hero />
-        <Marquee />
-        <About />
-        <Skills />
-        <Learning />
-        <Projects />
-        <Interests />
-        <Contact />
-      </main>
-      <Footer />
-    </MotionConfig>
+    <LazyMotion features={domAnimation}>
+      <MotionConfig reducedMotion="user">
+        <Background />
+        <Navbar />
+        <main className="flex-1">
+          <Hero />
+          <Marquee />
+          <About />
+          <Skills />
+          <Learning />
+          <Projects />
+          <Interests />
+          <Contact />
+        </main>
+        <Footer />
+      </MotionConfig>
+    </LazyMotion>
   );
 }
