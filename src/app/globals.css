@@ -1,19 +1,54 @@
 @import "tailwindcss";
 
 /* ===========================================================
-   Design tokens — a warm dark canvas with vibrant gradients
+   Design tokens: a warm near-black canvas with a film-grade palette
    =========================================================== */
 :root {
-  --background: #1a1a1a;
-  --background-soft: #222222;
-  --foreground: #f5f3ff;
-  --muted: #b8b8c4;
-  --border: rgba(255, 255, 255, 0.08);
-  --card: rgba(255, 255, 255, 0.04);
+  --background: #0f0b09;
+  --background-soft: #19120f;
+  --mesh-teal: #0e2a2b;
+  --foreground: #f4ece1;
+  --muted: #a99f93;
+  --muted-strong: #d8cabc;
+  --ember: #ff6b3d;
+  --amber: #ffb65c;
+  --rose: #e86f8a;
+  --accent-orange: var(--ember);
+  --accent-orange-soft: #d65537;
+  --accent-teal: #6a9d96;
+  --accent-teal-soft: #315b59;
+  --border: rgb(244 236 225 / 0.12);
+  --card: var(--card-fill);
+  --card-fill: rgb(244 236 225 / 0.07);
+  --card-fill-fallback: #211711;
+  --card-border: rgb(255 182 92 / 0.38);
+  --card-border-teal: rgb(14 42 43 / 0.72);
+  --surface-highlight: rgb(255 244 232 / 0.1);
+  --surface-nav: rgb(246 246 246 / 0.14);
+  --surface-nav-condensed: rgb(246 246 246 / 0.18);
+  --surface-nav-fallback: #303030;
+  --surface-nav-border: linear-gradient(
+    135deg,
+    rgb(255 255 255 / 0.68) 0%,
+    rgb(255 255 255 / 0.24) 52%,
+    rgb(255 255 255 / 0.1) 100%
+  );
+  --surface-nav-sheen: linear-gradient(
+    116deg,
+    transparent 9%,
+    rgb(255 255 255 / 0.075) 20%,
+    rgb(255 255 255 / 0.02) 32%,
+    transparent 44%,
+    transparent 73%,
+    rgb(255 255 255 / 0.035) 88%,
+    transparent 100%
+  );
+  --signature-gradient: linear-gradient(110deg, var(--ember), var(--amber) 52%, var(--rose));
   --page-gutter: clamp(1.25rem, 4vw, 2rem);
   --section-space: clamp(5rem, 10vw, 7rem);
-  --focus-ring: #f0abfc;
-  --focus-ring-soft: rgb(168 85 247 / 0.24);
+  --focus-ring: var(--amber);
+  --focus-ring-soft: rgb(255 182 92 / 0.28);
+  --noise-tile: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cg fill='%23F4ECE1' fill-opacity='.08'%3E%3Ccircle cx='7' cy='11' r='.7'/%3E%3Ccircle cx='31' cy='6' r='.5'/%3E%3Ccircle cx='58' cy='19' r='.65'/%3E%3Ccircle cx='73' cy='45' r='.5'/%3E%3Ccircle cx='18' cy='54' r='.55'/%3E%3Ccircle cx='45' cy='70' r='.7'/%3E%3C/g%3E%3C/svg%3E");
 }
 
 @theme inline {
@@ -22,7 +57,8 @@
   --color-muted: var(--muted);
   --color-border: var(--border);
   --color-card: var(--card);
-  --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-hanken-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), Georgia, serif;
   --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
 }
 
@@ -30,7 +66,7 @@ html {
   min-height: 100%;
   color-scheme: dark;
   scroll-behavior: smooth;
-  scroll-padding-top: calc(clamp(4.5rem, 8vw, 6rem) + env(safe-area-inset-top));
+  scroll-padding-top: 104px;
 }
 
 body {
@@ -47,9 +83,22 @@ body {
   padding-bottom: env(safe-area-inset-bottom);
 }
 
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+}
+
+h1 em,
+h2 em,
+h3 em {
+  font-style: italic;
+  font-weight: 400;
+}
+
 /* Account for notches, home indicators, and compact keyboard viewports. */
-body > header.fixed {
-  padding-top: max(clamp(0.75rem, 1.5vw, 1rem), env(safe-area-inset-top));
+body > header.fixed:not(.lg-nav) {
+  padding-top: max(clamp(1rem, 1.8vw, 1.25rem), env(safe-area-inset-top));
   padding-right: max(1rem, env(safe-area-inset-right));
   padding-left: max(1rem, env(safe-area-inset-left));
 }
@@ -58,25 +107,9 @@ body > header.fixed {
   min-height: 100vh;
   min-height: 100svh;
   min-height: 100dvh;
-  padding-top: max(clamp(6.5rem, 14vw, 8rem), env(safe-area-inset-top));
+  padding-top: 104px;
   padding-bottom: max(clamp(4rem, 8vw, 5rem), env(safe-area-inset-bottom));
-}
-
-#mobile-navigation {
-  min-height: 100vh;
-  min-height: 100svh;
-  min-height: 100dvh;
-  padding-top: max(0.75rem, env(safe-area-inset-top));
-  padding-right: max(0.75rem, env(safe-area-inset-right));
-  padding-bottom: max(1rem, env(safe-area-inset-bottom));
-  padding-left: max(0.75rem, env(safe-area-inset-left));
-  overscroll-behavior: contain;
-}
-
-#mobile-navigation > div {
-  min-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
-  min-height: calc(100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
-  min-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  scroll-margin-top: 104px;
 }
 
 footer {
@@ -92,14 +125,14 @@ footer {
   background: var(--background);
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #a855f7, #ec4899);
+  background: linear-gradient(180deg, var(--ember), var(--accent-teal-soft));
   border-radius: 999px;
 }
 
 /* Selection */
 ::selection {
-  background: #a855f7;
-  color: #fff;
+  background: var(--ember);
+  color: var(--background);
 }
 
 /* A consistent keyboard-visible focus treatment for links, controls, and fields. */
@@ -114,18 +147,11 @@ footer {
 }
 
 :where(a, button) {
-  -webkit-tap-highlight-color: rgb(168 85 247 / 0.2);
+  -webkit-tap-highlight-color: rgb(237 149 85 / 0.2);
 }
 
 :where(button, a[href]) {
   touch-action: manipulation;
-}
-
-@media (max-width: 48rem) {
-  /* Prevent iOS from zooming the page when a form control receives focus. */
-  :where(input, textarea, select) {
-    font-size: 1rem;
-  }
 }
 
 /* ===========================================================
@@ -133,27 +159,193 @@ footer {
    =========================================================== */
 @layer utilities {
   .text-gradient {
-    background-image: linear-gradient(120deg, #f472b6, #a855f7, #6366f1);
+    background-image: var(--signature-gradient);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
 
-  .text-gradient-warm {
-    background-image: linear-gradient(120deg, #fb7185, #fbbf24, #fb7185);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-
+  /* Non-blur glass: the fill, border, highlight, and texture are all static. */
   .glass {
-    background: rgba(37, 29, 48, 0.86);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid transparent;
+    background-color: var(--card-fill);
+    background-image: var(--noise-tile),
+      linear-gradient(var(--card-fill), var(--card-fill)),
+      linear-gradient(135deg, var(--card-border), var(--card-border-teal) 52%, var(--card-border));
+    background-position: 0 0, 0 0, 0 0;
+    background-size: 160px 160px, auto, auto;
+    background-repeat: repeat, no-repeat, no-repeat;
+    background-clip: padding-box, padding-box, border-box;
+    background-blend-mode: soft-light, normal, normal;
+    box-shadow: inset 0 1px 0 rgb(255 244 232 / 0.14),
+      inset 0 0 0 1px rgb(255 244 232 / 0.03), 0 18px 48px rgb(3 8 8 / 0.2);
   }
 
-  .glass-blur {
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+  .gradient-button {
+    background-image: var(--signature-gradient);
+  }
+
+  /* The nav itself is only a fixed stacking shell. All glass rendering lives
+     on .lg-glass so backdrop-filter has one, unambiguous target. */
+  .lg-nav {
+    position: fixed;
+    box-sizing: border-box;
+    top: 16px;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    margin-inline: auto;
+    width: max-content;
+    max-width: calc(100vw - 24px);
+    height: auto;
+    isolation: isolate;
+    overflow: visible;
+    border-radius: 9999px;
+    background: transparent;
+    transition: border-radius 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .lg-glass {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    border-radius: inherit;
+    background: linear-gradient(
+      135deg,
+      rgb(255 255 255 / 0.2),
+      rgb(255 255 255 / 0.04) 60%,
+      rgb(255 255 255 / 0.1)
+    );
+    -webkit-backdrop-filter: blur(14px) saturate(180%) brightness(1.1);
+    backdrop-filter: blur(14px) saturate(180%) brightness(1.1);
+    box-shadow: inset 1.5px 1.5px 0 rgb(255 255 255 / 0.55),
+      inset -1px -1px 0 rgb(255 255 255 / 0.15),
+      inset 0 0 24px rgb(255 255 255 / 0.12), 0 8px 32px rgb(0 0 0 / 0.35);
+  }
+
+  /* SVG refraction is opt-in only after Chromium has been detected. Keeping
+     url(#liquid-glass) out of the base declaration preserves blur elsewhere. */
+  .chromium .lg-glass {
+    -webkit-backdrop-filter: url(#liquid-glass) blur(6px) saturate(180%);
+    backdrop-filter: url(#liquid-glass) blur(6px) saturate(180%);
+  }
+
+  .lg-glass::after {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    box-sizing: border-box;
+    padding: 1px;
+    pointer-events: none;
+    border-radius: inherit;
+    background: var(--surface-nav-border);
+    content: "";
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+  }
+
+  .lg-sheen {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    border-radius: inherit;
+    background: linear-gradient(
+      118deg,
+      rgb(255 255 255 / 0.35) 0%,
+      transparent 42%,
+      rgb(255 255 255 / 0.1) 100%
+    );
+    mix-blend-mode: overlay;
+  }
+
+  .lg-bar {
+    position: relative;
+    box-sizing: border-box;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 8px;
+    height: 56px;
+    padding: 0 8px;
+  }
+
+  .lg-brand {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .lg-brand-name {
+    display: block;
+  }
+
+  .lg-links {
+    position: relative;
+    display: flex;
+    flex: 0 0 auto;
+    min-width: 0;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    white-space: nowrap;
+  }
+
+  .lg-links > li {
+    flex: 0 0 auto;
+    min-width: 0;
+  }
+
+  .lg-active-lens {
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    z-index: 0;
+    display: block;
+    padding: 0;
+    list-style: none;
+    pointer-events: none;
+    transition: left 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+      width 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .navbar-link {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 18px;
+    border-radius: 9999px;
+    font-size: 15px;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .navbar-link > span {
+    position: relative;
+    z-index: 1;
+  }
+
+  .lg-cta {
+    display: inline-flex;
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .lg-burger {
+    display: none;
+    flex: 0 0 auto;
+  }
+
+  .lg-panel {
+    display: none;
   }
 
   .eyebrow {
@@ -164,29 +356,242 @@ footer {
     font-weight: 600;
   }
 
-  .ring-spin::before {
-    content: "";
-    position: absolute;
-    inset: -3px;
-    border-radius: 9999px;
-    background: conic-gradient(
-      from 0deg,
-      #f472b6,
-      #a855f7,
-      #6366f1,
-      #22d3ee,
-      #f472b6
-    );
-    z-index: -1;
-    animation: spin 6s linear infinite;
+}
+
+.navbar-header {
+  --focus-ring: #f5f5f5;
+  --focus-ring-soft: rgb(255 255 255 / 0.18);
+  color: #f5f5f5;
+}
+
+.lg-filter-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.navbar-header :where(a, button) {
+  -webkit-tap-highlight-color: rgb(255 255 255 / 0.12);
+}
+
+.navbar-link {
+  color: #f5f5f5;
+  transition: color 180ms ease, background-color 180ms ease,
+    transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.navbar-control,
+.navbar-menu-link {
+  color: #f5f5f5;
+  border: 1px solid rgb(255 255 255 / 0.18);
+  background: rgb(255 255 255 / 0.065);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.22), inset 0 0 0 1px rgb(255 255 255 / 0.04);
+  transition: background-color 180ms ease, border-color 180ms ease,
+    transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.lg-avatar {
+  border: 1px solid rgb(255 255 255 / 0.35);
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.24);
+}
+
+.lg-menu-button {
+  border: 1px solid rgb(255 255 255 / 0.3);
+  background: linear-gradient(
+    135deg,
+    rgb(255 255 255 / 0.2),
+    rgb(255 255 255 / 0.05) 60%,
+    rgb(255 255 255 / 0.12)
+  );
+  box-shadow: inset 1px 1px 0 rgb(255 255 255 / 0.4),
+    inset -1px -1px 0 rgb(255 255 255 / 0.12),
+    inset 0 0 12px rgb(255 255 255 / 0.08);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background-color 180ms ease;
+}
+
+.navbar-active-lens {
+  pointer-events: none;
+  border: 1px solid rgb(255 255 255 / 0.24);
+  background: rgb(255 255 255 / 0.1);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.34),
+    inset 0 0 12px rgb(255 255 255 / 0.06), 0 2px 8px rgb(0 0 0 / 0.12);
+  transition: all 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.navbar-menu-link[aria-current="page"] {
+  background: rgb(255 255 255 / 0.12);
+}
+
+.lg-panel-link {
+  display: block;
+  white-space: nowrap;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .navbar-link:hover,
+  .navbar-control:hover,
+  .navbar-menu-link:hover {
+    transform: scale(1.04);
+  }
+
+  .navbar-link:hover {
+    color: #ffffff;
+    background-color: rgb(255 255 255 / 0.05);
+  }
+
+  .navbar-link:hover .navbar-active-lens {
+    background: rgb(255 255 255 / 0.16);
   }
 }
 
-/* Shared responsive primitives. Framer Motion only animates opacity/transform. */
+.navbar-link:active,
+.navbar-control:active,
+.navbar-menu-link:active {
+  transform: scale(0.97);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .lg-menu-button:hover {
+    transform: scale(1.05);
+  }
+}
+
+.lg-menu-button:active {
+  transform: scale(0.96);
+}
+
+.navbar-header :where(a, button):focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 4px;
+  box-shadow: 0 0 0 4px rgb(8 8 8 / 0.9), 0 0 0 6px rgb(255 255 255 / 0.42);
+}
+
+@supports not ((mask-composite: exclude) or (-webkit-mask-composite: xor)) {
+  .lg-glass::after {
+    display: none;
+  }
+
+  .lg-glass {
+    border: 1px solid rgb(255 255 255 / 0.38);
+  }
+}
+
+/* A reusable interactive card. Pointer coordinates are written by GlassCard
+   without rerendering, then consumed by this static CSS sheen. */
+.glass-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid transparent;
+  background-color: var(--card-fill);
+  background-image: var(--noise-tile),
+    linear-gradient(var(--card-fill), var(--card-fill)),
+    linear-gradient(135deg, var(--card-border), var(--card-border-teal) 52%, var(--card-border));
+  background-position: 0 0, 0 0, 0 0;
+  background-size: 160px 160px, auto, auto;
+  background-repeat: repeat, no-repeat, no-repeat;
+  background-clip: padding-box, padding-box, border-box;
+  background-blend-mode: soft-light, normal, normal;
+  box-shadow: inset 0 1px 0 rgb(255 244 232 / 0.14),
+    inset 0 0 0 1px rgb(255 244 232 / 0.03), 0 18px 48px rgb(3 8 8 / 0.2);
+}
+
+.glass-card::before,
+.glass-card::after {
+  position: absolute;
+  pointer-events: none;
+  border-radius: inherit;
+  content: "";
+}
+
+.glass-card::before {
+  inset: 0;
+  z-index: 0;
+  box-shadow: inset 0 1px 0 rgb(255 244 232 / 0.11);
+}
+
+.glass-card::after {
+  inset: -28%;
+  z-index: 0;
+  opacity: 0;
+  background: radial-gradient(
+    circle at var(--card-pointer-x, 50%) var(--card-pointer-y, 50%),
+    rgb(255 219 174 / 0.2),
+    transparent 34%
+  );
+  mix-blend-mode: screen;
+  transition: opacity 220ms ease;
+}
+
+.glass-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .glass-card {
+    transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .glass-card:hover {
+    transform: translate3d(0, -3px, 0);
+    border-color: rgb(255 182 92 / 0.5);
+  }
+}
+
+.glass-card:active {
+  transform: scale(0.98);
+}
+
+@media (pointer: fine) and (hover: hover) {
+  .glass-card:hover::after,
+  .glass-card:focus-within::after {
+    opacity: 1;
+  }
+}
+
+/* Older engines still receive a warm opaque-ish card, border, and noise tile
+   if they cannot parse the layered padding-box/border-box background. */
+@supports not (background-clip: padding-box) {
+  .glass,
+  .glass-card {
+    border-color: var(--card-border);
+    background-color: var(--card-fill-fallback);
+    background-image: var(--noise-tile);
+    background-clip: border-box;
+    background-size: 160px 160px;
+    background-repeat: repeat;
+  }
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .lg-glass {
+    background: var(--surface-nav-fallback);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .lg-glass {
+    background: var(--surface-nav-fallback);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .lg-sheen {
+    opacity: 0.35;
+  }
+}
+
+/* Shared responsive primitives. Motion is limited to opacity and transform. */
 .section-shell {
   padding-inline: var(--page-gutter);
   padding-block: var(--section-space);
-  scroll-margin-top: calc(clamp(4.5rem, 8vw, 6rem) + env(safe-area-inset-top));
+  scroll-margin-top: 104px;
 }
 
 .section-header {
@@ -200,88 +605,138 @@ footer {
 }
 
 .section-subtitle {
+  max-width: 65ch;
   font-size: clamp(1rem, 1.5vw, 1.125rem);
   line-height: 1.7;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+.reveal-block {
+  opacity: 1;
+  transform: none;
 }
 
-@keyframes float {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-  50% {
-    transform: translate(20px, -30px) scale(1.05);
-  }
-}
-@keyframes float-slow {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-  50% {
-    transform: translate(-30px, 25px) scale(1.08);
-  }
-}
-.background-orb {
-  contain: paint;
-  opacity: 0.7;
-  pointer-events: none;
-  transform: translateZ(0);
+.reveal-block.reveal-enabled:not(.is-visible) {
+  opacity: 0;
+  transform: translate3d(0, var(--reveal-y, 18px), 0);
 }
 
-.background-orb-fuchsia {
-  background: radial-gradient(circle, rgb(192 38 211 / 0.2), transparent 68%);
+.reveal-block.reveal-enabled.is-visible {
+  transition-property: opacity, transform;
+  transition-duration: 600ms;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0s);
 }
 
-.background-orb-indigo {
-  background: radial-gradient(circle, rgb(79 70 229 / 0.2), transparent 68%);
+/* Static background layers. The background component intentionally has no
+   animation, transforms, or scroll listeners. */
+.background-blob {
+  position: absolute;
+  width: clamp(14rem, 30vw, 28rem);
+  height: clamp(14rem, 30vw, 28rem);
+  border-radius: 9999px;
+  filter: blur(76px);
+  opacity: 0.2;
 }
 
-@media (min-width: 48.01rem) and (prefers-reduced-motion: no-preference) {
-  .background-orb-fuchsia {
-    animation: float 18s ease-in-out infinite;
+.background-blob-orange {
+  top: -8rem;
+  left: 16%;
+  background: var(--ember);
+}
+
+.background-blob-pink {
+  top: 24%;
+  right: -10rem;
+  background: var(--rose);
+  opacity: 0.16;
+}
+
+.background-blob-purple {
+  bottom: -10rem;
+  left: 34%;
+  background: #8b5cf6;
+  opacity: 0.12;
+}
+
+.background-wash {
+  background:
+    radial-gradient(88% 68% at 6% 0%, rgb(255 107 61 / 0.12), transparent 64%),
+    radial-gradient(76% 70% at 96% 100%, rgb(14 42 43 / 0.8), transparent 66%),
+    linear-gradient(135deg, var(--background) 0%, #15100e 52%, #0a0807 100%);
+}
+
+.background-glow {
+  background: radial-gradient(54% 42% at 48% 20%, rgb(255 182 92 / 0.07), transparent 72%);
+}
+
+.background-grid {
+  background-image: linear-gradient(to right, rgb(246 238 228 / 0.055) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(246 238 228 / 0.055) 1px, transparent 1px);
+  background-size: clamp(3rem, 6vw, 4.5rem) clamp(3rem, 6vw, 4.5rem);
+  mask-image: linear-gradient(to bottom, black 0%, rgb(0 0 0 / 0.3) 52%, transparent 100%);
+  opacity: 0.56;
+}
+
+.background-vignette {
+  background: radial-gradient(ellipse at center, transparent 28%, rgb(2 6 7 / 0.5) 100%);
+}
+
+/* One navbar breakpoint: desktop starts at 768px. */
+@media (max-width: 767px) {
+  /* Prevent iOS from zooming the page when a form control receives focus. */
+  :where(input, textarea, select) {
+    font-size: 1rem;
   }
 
-  .background-orb-indigo {
-    animation: float-slow 22s ease-in-out infinite;
+  .lg-nav {
+    width: min(92vw, 420px);
+    max-width: 92vw;
   }
-}
 
-@media (max-width: 48rem) {
-  .background-orb {
+  .lg-bar {
+    justify-content: space-between;
+  }
+
+  .lg-cta {
     display: none;
   }
-}
 
-@keyframes marquee {
-  from {
-    transform: translateX(0);
+  .lg-burger {
+    display: grid;
   }
-  to {
-    transform: translateX(-50%);
-  }
-}
-.animate-marquee {
-  animation: marquee 30s linear infinite;
-}
 
-@media (hover: hover) {
-  .marquee-track:hover {
-    animation-play-state: paused;
+  .lg-panel {
+    position: relative;
+    z-index: 2;
+    display: block;
+    max-height: 0;
+    height: 0;
+    min-height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    transition: max-height 0.4s ease, visibility 0.4s;
   }
-}
 
-@media (max-width: 40rem) {
-  .glass-blur {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
+  .lg-panel ul {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0;
+    padding: 8px 16px 16px;
+    list-style: none;
   }
+
+  .lg-nav[data-open="true"] {
+    border-radius: 28px;
+  }
+
+  .lg-nav[data-open="true"] .lg-panel {
+    max-height: 320px;
+    height: auto;
+    visibility: visible;
+  }
+
+  .lg-links { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -299,12 +754,35 @@ footer {
     scroll-behavior: auto !important;
   }
 
-  .animate-float,
-  .animate-float-slow,
-  .animate-marquee,
-  .animate-ping,
-  .ring-spin::before {
-    animation: none !important;
+  .glass-card::after {
+    display: none;
+  }
+
+  .glass-card,
+  .glass-card:hover,
+  .glass-card:active {
+    transform: none;
+    transition: none;
+  }
+
+  .navbar-link:hover,
+  .navbar-control:hover,
+  .navbar-menu-link:hover,
+  .lg-menu-button:hover,
+  .navbar-link:active,
+  .navbar-control:active,
+  .navbar-menu-link:active,
+  .lg-menu-button:active {
+    transform: none;
+  }
+
+  .navbar-active-lens {
+    transition: none;
+  }
+
+  .reveal-block.reveal-enabled:not(.is-visible) {
+    opacity: 1;
+    transform: none;
   }
 }
 

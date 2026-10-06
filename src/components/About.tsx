@@ -1,86 +1,62 @@
-"use client";
-
-import { Section, SectionHeader, Reveal, StaggerGroup, staggerItem } from "./Primitives";
-import { m } from "framer-motion";
+import GlassCard from "./GlassCard";
+import { Section, SectionHeader, Reveal } from "./Primitives";
 import { about, education, profile, goals } from "@/data/portfolio";
 
 export default function About() {
   return (
     <Section id="about">
       <SectionHeader
-        eyebrow="01 — About"
+        eyebrow="01 / About"
         title={
           <>
-            A bit about <span className="text-gradient">me</span>
+            A short <em>introduction</em>
           </>
         }
+        subtitle="I am keeping this page as a simple record of what I study and what I am working toward."
       />
 
-      <div className="grid gap-6 lg:grid-cols-5">
-        {/* Bio + education */}
-        <Reveal className="lg:col-span-3">
-          <div className="glass h-full rounded-3xl p-7 sm:p-9">
-            <p className="text-pretty text-lg leading-relaxed text-white/85 sm:text-xl">
+      <div className="grid gap-5 lg:grid-cols-[1.2fr_0.8fr] lg:items-stretch">
+        <Reveal>
+          <GlassCard className="h-full rounded-[1.75rem] p-7 sm:p-9">
+            <p className="max-w-2xl text-pretty text-xl leading-relaxed text-white/90 sm:text-2xl">
               {about.text}
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-3">
-              <InfoChip label="📍" value={profile.location} />
-              <InfoChip label="🎓" value={education.degree} />
-              <InfoChip label="📘" value={education.semester} />
-            </div>
-          </div>
+            <dl className="mt-10 grid gap-x-8 gap-y-6 border-t border-white/10 pt-6 sm:grid-cols-2">
+              <InfoRow label="Location" value={profile.location} />
+              <InfoRow label="Degree" value={education.degree} />
+              <InfoRow label="College" value={education.college} />
+              <InfoRow label="Graduation" value={education.graduationYear} />
+            </dl>
+          </GlassCard>
         </Reveal>
 
-        {/* Goals card */}
-        <Reveal delay={0.1} className="lg:col-span-2">
-          <div className="glass h-full rounded-3xl p-7 sm:p-9">
-            <h3 className="mb-5 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-[var(--muted)]">
-              <span className="text-lg">🎯</span> Goals
-            </h3>
-            <StaggerGroup className="flex flex-col gap-3">
-              {goals.map((g) => (
-                <m.li
-                  key={g}
-                  variants={staggerItem}
-                  className="flex items-start gap-3 text-sm text-white/80"
-                >
-                  <span className="mt-1 text-fuchsia-400">▹</span>
-                  {g}
-                </m.li>
+        <Reveal delay={0.1}>
+          <GlassCard className="h-full rounded-[1.75rem] p-7 sm:p-9 lg:translate-y-10">
+            <p className="eyebrow text-[var(--accent-orange)]">Goals</p>
+            <h3 className="mt-4 text-2xl font-semibold text-white">What I am working toward</h3>
+            <ul className="mt-7 divide-y divide-white/10">
+              {goals.map((goal, index) => (
+                <li key={goal} className="flex gap-4 py-3.5 first:pt-0 last:pb-0">
+                  <span className="font-mono text-xs text-[var(--accent-orange)]">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <span className="text-sm leading-6 text-white/80">{goal}</span>
+                </li>
               ))}
-            </StaggerGroup>
-          </div>
+            </ul>
+          </GlassCard>
         </Reveal>
       </div>
-
-      {/* Stats row */}
-      <Reveal delay={0.15}>
-        <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
-          <Stat value="5+" label="Languages coded" />
-          <Stat value="7+" label="Tech stacks" />
-          <Stat value="6" label="Languages spoken" />
-          <Stat value="∞" label="Curiosity" />
-        </div>
-      </Reveal>
     </Section>
   );
 }
 
-function InfoChip({ label, value }: { label: string; value: string }) {
+function InfoRow({ label, value }: { label: string; value: string }) {
   return (
-    <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-xs font-medium text-white/80">
-      <span aria-hidden>{label}</span>
-      {value}
-    </span>
-  );
-}
-
-function Stat({ value, label }: { value: string; label: string }) {
-  return (
-    <div className="glass rounded-2xl p-5 text-center">
-      <div className="text-3xl font-bold text-gradient sm:text-4xl">{value}</div>
-      <div className="mt-1 text-xs text-[var(--muted)]">{label}</div>
+    <div>
+      <dt className="eyebrow text-[var(--muted)]">{label}</dt>
+      <dd className="mt-2 text-sm leading-6 text-white/85">{value}</dd>
     </div>
   );
 }

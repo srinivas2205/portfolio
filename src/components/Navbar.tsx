@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import {
-  AnimatePresence,
   m,
   useMotionValueEvent,
   useReducedMotion,
@@ -14,14 +13,92 @@ import { profile, navLinks } from "@/data/portfolio";
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [active, setActive] = useState<string>("");
-  const menuRef = useRef<HTMLDivElement>(null);
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const [active, setActive] = useState<string>(navLinks[0]?.href ?? "");
+  const scrolledRef = useRef(false);
+  const linksRef = useRef<HTMLUListElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
+  const [lens, setLens] = useState({ left: 0, width: 0 });
   const { scrollY } = useScroll();
   const prefersReducedMotion = useReducedMotion();
 
-  useMotionValueEvent(scrollY, "change", (v) => setScrolled(v > 24));
+  // Keep the SVG displacement filter opt-in. The plain blur declaration below
+  // must remain valid in every browser, including Safari and Firefox.
+  useEffect(() => {
+    const browser = navigator as Navigator & {
+      userAgentData?: { brands?: Array<{ brand: string }> };
+    };
+    const brands = browser.userAgentData?.brands ?? [];
+    const isChromium = brands.length
+      ? brands.some(({ brand }) => /Chromium|Chrome|Edg|OPR|Brave/i.test(brand))
+      : /Chrome|Chromium|Edg\/|OPR\//i.test(navigator.userAgent);
+
+    document.documentElement.classList.toggle("chromium", isChromium);
+
+    return () => document.documentElement.classList.remove("chromium");
+  }, []);
+
+  // Keep the active lens aligned with the rendered link after scroll, font
+  // loading, and viewport changes. The glass itself remains untouched.
+  useEffect(() => {
+    let disposed = false;
+    let frame: number | null = null;
+
+    const updateLens = () => {
+      if (disposed) return;
+
+      const activeLink = linksRef.current?.querySelector<HTMLAnchorElement>(
+        '[aria-current="page"]'
+      );
+
+      if (!activeLink) {
+        setLens({ left: 0, width: 0 });
+        return;
+      }
+
+      setLens({ left: activeLink.offsetLeft, width: activeLink.offsetWidth });
+    };
+
+    const scheduleUpdate = () => {
+      if (disposed) return;
+      if (frame !== null) window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(() => {
+        frame = null;
+        updateLens();
+      });
+    };
+
+    const handleResize = () => {
+      if (disposed) return;
+      if (toggleRef.current && window.getComputedStyle(toggleRef.current).display === "none") {
+        setOpen(false);
+      }
+      scheduleUpdate();
+    };
+
+    const resizeObserver =
+      typeof ResizeObserver === "undefined" ? null : new ResizeObserver(handleResize);
+
+    scheduleUpdate();
+    window.addEventListener("resize", handleResize);
+    if (linksRef.current) resizeObserver?.observe(linksRef.current);
+    if (toggleRef.current) resizeObserver?.observe(toggleRef.current);
+    document.fonts?.ready.then(scheduleUpdate);
+
+    return () => {
+      disposed = true;
+      if (frame !== null) window.cancelAnimationFrame(frame);
+      resizeObserver?.disconnect();
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [active]);
+
+  useMotionValueEvent(scrollY, "change", (v) => {
+    const nextScrolled = v > 24;
+    if (nextScrolled === scrolledRef.current) return;
+
+    scrolledRef.current = nextScrolled;
+    setScrolled(nextScrolled);
+  });
 
   // Track which section is in view
   useEffect(() => {
@@ -41,150 +118,112 @@ export default function Navbar() {
     return () => observer.disconnect();
   }, []);
 
-  // Keep the page in place while the mobile menu is open.
+  // The mobile menu is part of the same glass pill, so Escape only needs to
+  // close it and return focus to the hamburger.
   useEffect(() => {
     if (!open) return;
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [open]);
-
-  // Move focus into the menu, keep it contained, and return it to the toggle.
-  useEffect(() => {
-    if (!open) return;
-
-    const previouslyFocused =
-      document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    const menuToggle = toggleRef.current;
-    const focusFrame = window.requestAnimationFrame(() => closeButtonRef.current?.focus());
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         event.preventDefault();
         setOpen(false);
-        return;
-      }
-
-      if (event.key !== "Tab") return;
-
-      const menu = menuRef.current;
-      if (!menu) return;
-
-      const focusableElements = Array.from(
-        menu.querySelectorAll<HTMLElement>(
-          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
-        )
-      );
-
-      if (focusableElements.length === 0) {
-        event.preventDefault();
-        return;
-      }
-
-      const firstElement = focusableElements[0];
-      const lastElement = focusableElements[focusableElements.length - 1];
-      const activeElement = document.activeElement;
-
-      if (event.shiftKey && (activeElement === firstElement || !menu.contains(activeElement))) {
-        event.preventDefault();
-        lastElement.focus();
-      } else if (!event.shiftKey && (activeElement === lastElement || !menu.contains(activeElement))) {
-        event.preventDefault();
-        firstElement.focus();
+        window.requestAnimationFrame(() => toggleRef.current?.focus());
       }
     };
 
     document.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      window.cancelAnimationFrame(focusFrame);
       document.removeEventListener("keydown", handleKeyDown);
-      const focusTarget = previouslyFocused?.isConnected ? previouslyFocused : menuToggle;
-      focusTarget?.focus();
     };
   }, [open]);
 
-  // Do not leave the page scroll-locked if the viewport changes to desktop.
-  useEffect(() => {
-    const desktopQuery = window.matchMedia("(min-width: 768px)");
-    const handleViewportChange = (event: MediaQueryListEvent) => {
-      if (event.matches) setOpen(false);
-    };
-
-    desktopQuery.addEventListener("change", handleViewportChange);
-    return () => desktopQuery.removeEventListener("change", handleViewportChange);
-  }, []);
-
   return (
-    <m.header
-      initial={{ y: -80, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-3 sm:pt-4"
-    >
-      <nav
-        aria-hidden={open}
-        className={`flex w-full max-w-5xl items-center justify-between rounded-2xl px-4 py-2.5 transition-all duration-300 sm:px-5 ${
-          scrolled
-            ? "glass glass-blur shadow-lg shadow-black/30"
-            : "border border-transparent bg-transparent"
-        }`}
-      >
-        {/* Brand */}
-        <a
-          href="#top"
-          className="group flex items-center gap-2.5 rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-fuchsia-300"
-          onClick={() => setOpen(false)}
-        >
-          <span className="relative block h-9 w-9 overflow-hidden rounded-xl shadow-lg shadow-fuchsia-500/30 transition-transform group-hover:scale-110">
-            <Image
-              src="/profile.webp"
-              alt={profile.name}
-              fill
-              sizes="36px"
-              className="object-cover"
+    <>
+      <svg aria-hidden="true" className="lg-filter-defs" focusable="false">
+        <defs>
+          <filter id="liquid-glass" x="-20%" y="-20%" width="140%" height="140%">
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.012"
+              numOctaves={2}
+              seed={7}
+              result="liquid-noise"
             />
-          </span>
-          <span className="hidden text-sm font-semibold tracking-tight sm:block">
-            {profile.name}
-          </span>
-        </a>
+            <feGaussianBlur in="liquid-noise" stdDeviation="2" result="liquid-blur" />
+            <feDisplacementMap
+              in="SourceGraphic"
+              in2="liquid-blur"
+              scale={48}
+              xChannelSelector="R"
+              yChannelSelector="G"
+            />
+          </filter>
+        </defs>
+      </svg>
+      <header
+        role="navigation"
+        aria-label="Primary navigation"
+        data-open={open ? "true" : "false"}
+        data-scrolled={scrolled ? "true" : "false"}
+        className="lg-nav navbar-header"
+      >
+        <span aria-hidden="true" className="lg-glass" />
+        <span aria-hidden="true" className="lg-sheen" />
+        <div className="lg-bar">
+          <a
+            href="#top"
+            className="lg-brand group flex items-center gap-2.5 rounded-lg"
+            onClick={() => setOpen(false)}
+          >
+            <span className="lg-avatar relative block h-9 w-9 overflow-hidden rounded-full transition-transform group-hover:scale-110">
+              <Image
+                src="/profile.webp"
+                alt={profile.name}
+                fill
+                sizes="36px"
+                className="object-cover"
+              />
+            </span>
+            <span className="lg-brand-name text-sm font-semibold tracking-tight">
+              {profile.name}
+            </span>
+          </a>
 
-        {/* Desktop links */}
-        <ul className="hidden items-center gap-1 md:flex">
-          {navLinks.map((link) => (
-            <li key={link.href}>
-              <a
-                href={link.href}
-                aria-current={active === link.href ? "location" : undefined}
-                className={`relative rounded-lg px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300 ${
-                  active === link.href
-                    ? "text-white"
-                    : "text-[var(--muted)] hover:text-white"
-                }`}
-              >
-                {active === link.href && (
-                   <m.span
-                    layoutId="nav-active"
-                    className="absolute inset-0 -z-10 rounded-lg bg-white/10"
-                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                  />
-                )}
-                {link.label}
-              </a>
-            </li>
-          ))}
-        </ul>
+          <ul ref={linksRef} id="desktop-navigation" className="lg-links">
+            <m.li
+              aria-hidden="true"
+              className="navbar-active-lens lg-active-lens"
+              style={{ left: lens.left, width: lens.width }}
+              transition={
+                prefersReducedMotion
+                  ? { duration: 0 }
+                  : { type: "tween", duration: 0.45, ease: [0.34, 1.56, 0.64, 1] }
+              }
+            />
+            {navLinks.map((link) => (
+              <li key={link.href}>
+                <a
+                  href={link.href}
+                  aria-current={active === link.href ? "page" : undefined}
+                  onClick={() => {
+                    setActive(link.href);
+                    setOpen(false);
+                  }}
+                  className={`navbar-link ${
+                    active === link.href ? "text-white" : "text-[#d4d4d4] hover:text-white"
+                  }`}
+                >
+                  <span>{link.label}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
 
-        {/* CTA + mobile toggle */}
-        <div className="flex items-center gap-2">
           <a
             href="#contact"
-            className="hidden rounded-xl bg-gradient-to-r from-fuchsia-500 to-indigo-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-fuchsia-500/20 transition-transform hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300 sm:inline-flex"
+            className="navbar-control lg-cta rounded-xl px-4 py-2 text-sm font-semibold"
+            onClick={() => setOpen(false)}
           >
             Get in touch
           </a>
@@ -192,24 +231,23 @@ export default function Navbar() {
             ref={toggleRef}
             type="button"
             aria-label={open ? "Close menu" : "Open menu"}
-            aria-controls="mobile-navigation"
+            aria-controls="lg-panel"
             aria-expanded={open}
-            aria-haspopup="dialog"
-            onClick={() => setOpen((o) => !o)}
-            className="grid h-10 w-10 place-items-center rounded-xl glass focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300 md:hidden"
+            onClick={() => setOpen((value) => !value)}
+            className="navbar-control lg-menu-button lg-burger h-10 w-10 place-items-center rounded-xl"
           >
             <div aria-hidden="true" className="space-y-1.5">
-               <m.span
+              <m.span
                 animate={open ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
                 transition={{ duration: prefersReducedMotion ? 0 : 0.2 }}
                 className="block h-0.5 w-5 rounded bg-white"
               />
-               <m.span
+              <m.span
                 animate={open ? { opacity: 0 } : { opacity: 1 }}
                 transition={{ duration: prefersReducedMotion ? 0 : 0.15 }}
                 className="block h-0.5 w-5 rounded bg-white"
               />
-               <m.span
+              <m.span
                 animate={open ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
                 transition={{ duration: prefersReducedMotion ? 0 : 0.2 }}
                 className="block h-0.5 w-5 rounded bg-white"
@@ -217,94 +255,26 @@ export default function Navbar() {
             </div>
           </button>
         </div>
-      </nav>
-
-      {/* Mobile menu */}
-      <AnimatePresence initial={false}>
-        {open && (
-          <m.div
-            ref={menuRef}
-            id="mobile-navigation"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Mobile navigation"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: prefersReducedMotion ? 0 : 0.2 }}
-            onClick={(event) => {
-              if (event.target === event.currentTarget) setOpen(false);
-            }}
-            className="fixed inset-0 z-40 overflow-y-auto bg-[var(--background)]/98 px-3 pb-4 pt-3 sm:px-4 md:hidden"
-          >
-            <m.div
-              initial={{ opacity: 0, y: prefersReducedMotion ? 0 : -12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: prefersReducedMotion ? 0 : -12 }}
-              transition={{ duration: prefersReducedMotion ? 0 : 0.25, ease: [0.22, 1, 0.36, 1] }}
-              className="mx-auto flex min-h-[100dvh] w-full max-w-md flex-col"
-            >
-              <div className="flex justify-end">
-                <button
-                  ref={closeButtonRef}
-                  type="button"
-                  aria-label="Close menu"
-                  onClick={() => setOpen(false)}
-                  className="grid h-10 w-10 place-items-center rounded-xl glass focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300"
-                >
-                  <span aria-hidden="true" className="relative block h-5 w-5">
-                    <span className="absolute left-0 top-1/2 block h-0.5 w-5 -translate-y-1/2 rotate-45 rounded bg-white" />
-                    <span className="absolute left-0 top-1/2 block h-0.5 w-5 -translate-y-1/2 -rotate-45 rounded bg-white" />
-                  </span>
-                </button>
-              </div>
-
-              <ul className="flex flex-1 flex-col justify-center gap-2 py-6">
-                {navLinks.map((link, i) => (
-                  <m.li
-                    key={link.href}
-                    initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{
-                      delay: prefersReducedMotion ? 0 : 0.05 * i,
-                      duration: prefersReducedMotion ? 0 : 0.2,
-                    }}
-                    className="w-full"
-                  >
-                    <a
-                      href={link.href}
-                      aria-current={active === link.href ? "location" : undefined}
-                      onClick={() => setOpen(false)}
-                      className={`block w-full rounded-2xl glass px-5 py-3.5 text-center text-base font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300 sm:px-6 sm:py-4 sm:text-lg ${
-                        active === link.href ? "text-white" : "text-[var(--muted)] hover:text-white"
-                      }`}
-                    >
-                      {link.label}
-                    </a>
-                  </m.li>
-                ))}
-                <m.li
-                  initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    delay: prefersReducedMotion ? 0 : 0.05 * navLinks.length,
-                    duration: prefersReducedMotion ? 0 : 0.2,
+        <div className="lg-panel" id="lg-panel" aria-hidden={!open} inert={!open}>
+          <ul>
+            {navLinks.map((link) => (
+              <li key={link.href}>
+                <a
+                  href={link.href}
+                  aria-current={active === link.href ? "page" : undefined}
+                  onClick={() => {
+                    setActive(link.href);
+                    setOpen(false);
                   }}
-                  className="mt-3 w-full"
+                  className="navbar-menu-link lg-panel-link"
                 >
-                  <a
-                    href="#contact"
-                    onClick={() => setOpen(false)}
-                    className="block w-full rounded-2xl bg-gradient-to-r from-fuchsia-500 to-indigo-500 px-5 py-3.5 text-center text-base font-semibold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-300 sm:px-6 sm:py-4 sm:text-lg"
-                  >
-                    Get in touch
-                  </a>
-                </m.li>
-              </ul>
-            </m.div>
-          </m.div>
-        )}
-      </AnimatePresence>
-    </m.header>
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </header>
+    </>
   );
 }

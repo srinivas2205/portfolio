@@ -1,143 +1,94 @@
-"use client";
-
-import { useState } from "react";
+import GlassCard from "./GlassCard";
 import { Section, SectionHeader, Reveal } from "./Primitives";
 import { profile } from "@/data/portfolio";
 
 export default function Contact() {
-  const [name, setName] = useState("");
-  const [message, setMessage] = useState("");
-
-  const subject = encodeURIComponent(
-    name ? `Portfolio message from ${name}` : "Portfolio message"
-  );
-  const body = encodeURIComponent(message);
-  const mailto = `mailto:${profile.email}?subject=${subject}&body=${body}`;
-
   return (
     <Section id="contact">
       <SectionHeader
-        eyebrow="06 — Contact"
+        eyebrow="05 / Contact"
         title={
           <>
-            Let&apos;s build <span className="text-gradient">something</span>
+            Send me a <em>note</em>
           </>
         }
-        subtitle="Got a project, opportunity, or just want to say hi? My inbox is always open."
+        subtitle="I am open to messages about projects, opportunities, and work I can learn from."
       />
 
-      <div className="grid gap-6 lg:grid-cols-5">
-        {/* Quick contact details */}
-        <Reveal className="lg:col-span-2">
-          <div className="glass flex h-full flex-col justify-between gap-6 rounded-3xl p-7 sm:p-8">
+      <div className="grid gap-5 lg:grid-cols-[0.72fr_1.28fr] lg:items-stretch">
+        <Reveal>
+          <GlassCard className="flex h-full flex-col justify-between gap-10 rounded-[1.75rem] p-7 sm:p-9">
             <div>
-              <h3 className="mb-5 text-sm font-semibold uppercase tracking-wider text-[var(--muted)]">
-                Reach me directly
-              </h3>
-              <div className="flex flex-col gap-4">
+              <p className="eyebrow text-[var(--accent-orange)]">Contact details</p>
+              <div className="mt-7 flex flex-col gap-6">
+                <ContactRow label="Email" value={profile.email} />
                 <ContactRow
-                  icon="✉️"
-                  label="Email"
-                  value={profile.email}
-                  href={`mailto:${profile.email}`}
-                />
-                <ContactRow
-                  icon="📱"
                   label="Phone"
                   value={profile.phone}
                   href={`tel:${profile.phone.replace(/\s/g, "")}`}
                 />
-                <ContactRow
-                  icon="📍"
-                  label="Location"
-                  value={profile.location}
-                />
+                <ContactRow label="Location" value={profile.location} />
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-3">
-              <a
-                href={profile.github}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-white/10"
-              >
-                GitHub ↗
-              </a>
-              {profile.linkedin && (
-                <a
-                  href={profile.linkedin}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-white/10"
-                >
-                  LinkedIn ↗
-                </a>
-              )}
-              {profile.resume && (
-                <a
-                  href={profile.resume}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-fuchsia-500 to-indigo-500 px-4 py-2.5 text-sm font-semibold text-white"
-                >
-                  Resume ↓
-                </a>
-              )}
-            </div>
-          </div>
+            <a
+              href={profile.github}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex w-fit items-center rounded-lg border border-white/15 px-4 py-2.5 text-sm font-medium text-white/85 hover:border-[var(--accent-orange)]/60 hover:text-white"
+            >
+              GitHub ↗
+            </a>
+          </GlassCard>
         </Reveal>
 
-        {/* Message form (mailto-based) */}
-        <Reveal delay={0.1} className="lg:col-span-3">
-          <form
-            action={mailto}
-            method="post"
-            encType="text/plain"
-            className="glass flex h-full flex-col gap-4 rounded-3xl p-7 sm:p-8"
-          >
-            <h3 className="mb-1 text-sm font-semibold uppercase tracking-wider text-[var(--muted)]">
-              Send a message
-            </h3>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Field
-                label="Your name"
-                name="name"
-                value={name}
-                onChange={setName}
-                placeholder="Jane Doe"
-              />
-              <Field
-                label="Email (optional)"
-                name="email"
-                type="email"
-                placeholder="jane@email.com"
-              />
+        <Reveal delay={0.1}>
+          <GlassCard className="h-full rounded-[1.75rem] p-7 sm:p-9">
+            <form
+              action={`https://formsubmit.co/${profile.email}`}
+              method="POST"
+              className="flex h-full flex-col gap-5"
+            >
+            <input type="hidden" name="_subject" value={`Portfolio message for ${profile.name}`} />
+            <input type="hidden" name="_captcha" value="false" />
+            <input type="hidden" name="_template" value="table" />
+            <input type="hidden" name="_next" value="https://srinivasm.vercel.app/#contact" />
+
+            <div>
+              <p className="eyebrow text-[var(--accent-orange)]">Message form</p>
+              <h3 className="mt-4 text-2xl font-semibold text-white">Tell me what you are working on</h3>
             </div>
+
+            <div className="grid gap-5 sm:grid-cols-2">
+              <Field label="Your name" name="name" placeholder="Jane Doe" required />
+              <Field label="Email" name="email" type="email" placeholder="jane@email.com" required />
+            </div>
+
             <div className="flex flex-1 flex-col">
-              <label className="mb-1.5 block text-xs font-medium text-[var(--muted)]">
+              <label htmlFor="message" className="mb-2 block text-xs font-medium text-[var(--muted)]">
                 Message
               </label>
               <textarea
+                id="message"
                 name="message"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Hi Srinivas, I'd love to talk about…"
-                rows={5}
-                className="w-full flex-1 resize-none rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/30 outline-none transition-colors focus:border-fuchsia-400/50 focus:bg-white/[0.07]"
+                placeholder="Hi Srinivas, I would like to talk about..."
+                rows={7}
+                required
+                 className="min-h-40 w-full flex-1 resize-y rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder-white/30 outline-none focus:border-[var(--accent-orange)]/60 focus:bg-white/[0.07]"
               />
             </div>
+
             <button
               type="submit"
-              className="mt-2 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-fuchsia-500 via-purple-500 to-indigo-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-fuchsia-500/30 transition-transform hover:scale-[1.02]"
+              className="gradient-button inline-flex items-center justify-center rounded-lg px-6 py-3 text-sm font-semibold text-[var(--background)] transition-transform hover:-translate-y-0.5"
             >
               Send message
-              <span>→</span>
             </button>
-            <p className="text-center text-xs text-[var(--muted)]">
-              Opens your email client pre-filled.
+            <p className="text-xs leading-5 text-[var(--muted)]">
+              This form sends through FormSubmit to {profile.email}.
             </p>
-          </form>
+            </form>
+          </GlassCard>
         </Reveal>
       </div>
     </Section>
@@ -145,34 +96,23 @@ export default function Contact() {
 }
 
 function ContactRow({
-  icon,
   label,
   value,
   href,
 }: {
-  icon: string;
   label: string;
   value: string;
   href?: string;
 }) {
   const content = (
-    <div className="flex items-center gap-3.5">
-      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-white/10 bg-white/5 text-lg">
-        {icon}
-      </span>
-      <div className="min-w-0">
-        <div className="text-xs text-[var(--muted)]">{label}</div>
-        <div className="truncate text-sm font-medium text-white/90">
-          {value}
-        </div>
-      </div>
+    <div className="border-l border-[var(--accent-orange)]/35 pl-4">
+      <div className="eyebrow text-[var(--muted)]">{label}</div>
+      <div className="mt-2 break-words text-sm font-medium text-white/90">{value}</div>
     </div>
   );
+
   return href ? (
-    <a
-      href={href}
-      className="transition-opacity hover:opacity-80"
-    >
+    <a href={href} className="transition-opacity hover:opacity-75">
       {content}
     </a>
   ) : (
@@ -183,30 +123,28 @@ function ContactRow({
 function Field({
   label,
   name,
-  value,
-  onChange,
   type = "text",
   placeholder,
+  required = false,
 }: {
   label: string;
   name: string;
-  value?: string;
-  onChange?: (v: string) => void;
   type?: string;
   placeholder?: string;
+  required?: boolean;
 }) {
   return (
     <div>
-      <label className="mb-1.5 block text-xs font-medium text-[var(--muted)]">
+      <label htmlFor={name} className="mb-2 block text-xs font-medium text-[var(--muted)]">
         {label}
       </label>
       <input
+        id={name}
         type={type}
         name={name}
-        value={value}
-        onChange={onChange ? (e) => onChange(e.target.value) : undefined}
         placeholder={placeholder}
-        className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/30 outline-none transition-colors focus:border-fuchsia-400/50 focus:bg-white/[0.07]"
+        required={required}
+        className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder-white/30 outline-none focus:border-[var(--accent-orange)]/60 focus:bg-white/[0.07]"
       />
     </div>
   );

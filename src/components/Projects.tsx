@@ -1,146 +1,84 @@
-"use client";
-
-import { Section, SectionHeader, Reveal, StaggerGroup, staggerItem } from "./Primitives";
-import { m } from "framer-motion";
-import { projects, projectPipeline, type Project } from "@/data/portfolio";
-
-const STATUS_STYLES: Record<string, string> = {
-  shipped: "bg-emerald-400/15 text-emerald-300 border-emerald-400/30",
-  "in-progress": "bg-amber-400/15 text-amber-300 border-amber-400/30",
-  planned: "bg-sky-400/15 text-sky-300 border-sky-400/30",
-};
+import GlassCard from "./GlassCard";
+import { Section, SectionHeader, Reveal } from "./Primitives";
+import { projectPlaceholders, type ProjectPlaceholder } from "@/data/portfolio";
 
 export default function Projects() {
-  const hasProjects = projects.length > 0;
-
   return (
     <Section id="projects">
       <SectionHeader
-        eyebrow="04 — Projects"
+        eyebrow="03 / Projects"
         title={
           <>
-            Things I&apos;m <span className="text-gradient">building</span>
+            A place for <em>real work</em>
           </>
         }
-        subtitle={
-          hasProjects
-            ? "A selection of projects I've designed, built, and shipped."
-            : "Real projects are coming soon — here's what's on my roadmap."
-        }
+        subtitle="These three spaces are ready for screenshots, summaries, stacks, and links as I finish projects worth sharing."
       />
 
-      {hasProjects ? (
-        <StaggerGroup className="grid gap-5 sm:grid-cols-2">
-          {projects.map((p) => (
-            <ProjectCard key={p.title} project={p} />
-          ))}
-        </StaggerGroup>
-      ) : (
-        /* Pipeline / placeholder state */
-        <Reveal>
-          <div className="glass rounded-3xl p-7 sm:p-9">
-            <div className="mb-6 flex items-center gap-3">
-              <span className="text-2xl">🛠️</span>
-              <h3 className="text-lg font-semibold">Project pipeline</h3>
-            </div>
-            <StaggerGroup className="grid gap-3 sm:grid-cols-2">
-              {projectPipeline.map((p) => (
-                <m.div
-                  key={p.title}
-                  variants={staggerItem}
-                  className="group flex items-center justify-between rounded-2xl border border-dashed border-white/15 bg-white/[0.03] p-4 transition-colors hover:border-fuchsia-400/40 hover:bg-white/[0.06]"
-                >
-                  <span className="text-sm font-medium text-white/85">
-                    {p.title}
-                  </span>
-                  <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wide text-[var(--muted)]">
-                    {p.status}
-                  </span>
-                </m.div>
-              ))}
-            </StaggerGroup>
-
-            <div className="mt-8 rounded-2xl border border-white/10 bg-gradient-to-br from-fuchsia-500/10 to-indigo-500/10 p-5">
-              <p className="text-sm text-white/70">
-                <span className="font-semibold text-white">Heads up:</span> This
-                section will fill up as I ship projects. Check back soon — or
-                follow along on{" "}
-                <a
-                  href="https://github.com/srinivas2205"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="font-medium text-fuchsia-300 underline-offset-4 hover:underline"
-                >
-                  GitHub
-                </a>
-                .
-              </p>
-            </div>
-          </div>
-        </Reveal>
-      )}
+      <div className="grid gap-5 lg:grid-cols-[1.15fr_0.85fr] lg:grid-rows-[1fr_1fr]">
+        {projectPlaceholders.map((project, index) => (
+          <Reveal
+            key={project.id}
+            delay={index * 0.08}
+            className={index === 0 ? "lg:row-span-2" : ""}
+          >
+            <ProjectCard project={project} index={index} />
+          </Reveal>
+        ))}
+      </div>
     </Section>
   );
 }
 
-function ProjectCard({ project }: { project: Project }) {
+function ProjectCard({
+  project,
+  index,
+}: {
+  project: ProjectPlaceholder;
+  index: number;
+}) {
   return (
-    <m.article
-      variants={staggerItem}
-      whileHover={{ y: -6 }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
-      className="glass group relative flex flex-col overflow-hidden rounded-3xl p-6"
-    >
-      <div className="mb-3 flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-white">{project.title}</h3>
-        {project.status && (
-          <span
-            className={`rounded-full border px-2.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wide ${
-              STATUS_STYLES[project.status]
-            }`}
-          >
-            {project.status.replace("-", " ")}
+    <GlassCard className="flex h-full min-h-[24rem] flex-col rounded-[1.75rem] p-4 sm:p-6">
+      <div className="project-screenshot relative flex min-h-44 items-end overflow-hidden rounded-[1.25rem] border border-white/10 bg-[var(--background-soft)] p-4 sm:min-h-52">
+        <div className="absolute inset-0 opacity-40 [background-image:linear-gradient(to_right,rgb(244_236_225_/_0.12)_1px,transparent_1px),linear-gradient(to_bottom,rgb(244_236_225_/_0.12)_1px,transparent_1px)] [background-size:1.75rem_1.75rem]" />
+        <div className="absolute right-5 top-5 h-20 w-28 rotate-3 rounded-lg border border-[var(--amber)]/35 bg-[var(--ember)]/10" />
+        <div className="absolute bottom-5 left-5 h-12 w-32 -rotate-2 rounded-lg border border-[var(--rose)]/35 bg-[var(--rose)]/10" />
+        <div className="relative z-10 flex w-full items-end justify-between gap-4">
+          <span className="rounded-full border border-dashed border-white/25 bg-black/20 px-2.5 py-1 font-mono text-[0.58rem] uppercase tracking-[0.14em] text-[var(--muted)]">
+            {project.screenshotLabel}
           </span>
-        )}
+          <span className="font-mono text-xs text-white/45">0{index + 1}</span>
+        </div>
       </div>
 
-      <p className="mb-4 flex-1 text-sm leading-relaxed text-[var(--muted)]">
-        {project.description}
-      </p>
+      <div className="flex flex-1 flex-col px-2 pb-2 pt-7">
+        <p className="eyebrow text-[var(--ember)]">TODO / project details</p>
+        <h3 className="mt-4 text-2xl font-semibold text-white sm:text-3xl">{project.title}</h3>
+        <p className="mt-3 max-w-md text-sm leading-6 text-[var(--muted)]">{project.summary}</p>
 
-      <div className="mb-4 flex flex-wrap gap-2">
-        {project.tags.map((tag) => (
-          <span
-            key={tag}
-            className="rounded-md border border-white/10 bg-white/5 px-2 py-0.5 text-xs text-white/70"
-          >
-            {tag}
-          </span>
-        ))}
-      </div>
+        <div className="mt-auto border-t border-white/10 pt-5">
+          <p className="eyebrow text-[var(--muted)]">Stack</p>
+          <ul className="mt-3 flex flex-wrap gap-2">
+            {project.stack.map((item) => (
+              <li
+                key={item}
+                className="rounded-md border border-white/10 bg-white/[0.04] px-2.5 py-1 text-xs text-white/75"
+              >
+                {item}
+              </li>
+            ))}
+          </ul>
 
-      <div className="flex gap-4 text-sm">
-        {project.link && (
-          <a
-            href={project.link}
-            target="_blank"
-            rel="noreferrer"
-            className="font-medium text-fuchsia-300 transition-colors hover:text-fuchsia-200"
-          >
-            Live ↗
-          </a>
-        )}
-        {project.repo && (
-          <a
-            href={project.repo}
-            target="_blank"
-            rel="noreferrer"
-            className="font-medium text-white/70 transition-colors hover:text-white"
-          >
-            Code ↗
-          </a>
-        )}
+          <div className="mt-6 flex flex-wrap items-center gap-4 text-sm">
+            <span className="font-medium text-white/70" aria-label="GitHub link placeholder">
+              GitHub link TODO
+            </span>
+            <span className="font-medium text-[var(--muted)]" aria-label="Live link placeholder">
+              Live link TODO
+            </span>
+          </div>
+        </div>
       </div>
-    </m.article>
+    </GlassCard>
   );
 }

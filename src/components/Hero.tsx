@@ -2,170 +2,151 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { m, AnimatePresence, useReducedMotion } from "framer-motion";
+import { Reveal } from "./Primitives";
 import { profile } from "@/data/portfolio";
 
-const ease = [0.22, 1, 0.36, 1] as const;
-
 export default function Hero() {
-  const reduce = useReducedMotion();
-
   return (
     <section
       id="top"
-      className="relative mx-auto flex min-h-screen w-full max-w-6xl flex-col items-center justify-center px-5 pt-28 pb-16 text-center sm:px-8"
+      className="relative mx-auto grid min-h-screen w-full max-w-6xl items-center gap-12 px-5 pt-28 pb-16 sm:px-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(18rem,0.85fr)] lg:gap-16"
     >
-      {/* Availability pill */}
-      <m.div
-        initial={reduce ? { opacity: 0 } : { opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease }}
-        className="mb-8 inline-flex max-w-full flex-wrap items-center justify-center gap-x-2 gap-y-1 rounded-full glass px-3 py-1.5 text-center text-xs font-medium leading-5 text-[var(--muted)] sm:px-4"
-      >
-        <span className="relative flex h-2 w-2">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-          <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-        </span>
-        Open to opportunities · {profile.location}
-      </m.div>
+      <div className="order-2 max-w-2xl lg:order-1">
+        <Reveal>
+          <LocalTimeChip />
+        </Reveal>
 
-      {/* Portrait */}
-      <m.div
-        initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.85 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.7, ease }}
-        className="ring-spin relative mb-7 h-28 w-28 sm:mb-8 sm:h-32 sm:w-32"
-      >
-        <div className="relative h-full w-full overflow-hidden rounded-full bg-[var(--background)] ring-4 ring-[var(--background)]">
-          <Image
-            src="/profile.webp"
-            alt={`${profile.name} — ${profile.roles[0]}`}
-            fill
-            priority
-            sizes="128px"
-            className="object-cover"
-          />
-        </div>
-      </m.div>
+        <Reveal delay={0.08}>
+          <p className="mt-7 eyebrow text-[var(--accent-orange)]">BCA student / developer in progress</p>
+          <h1 className="mt-4 max-w-3xl text-balance text-[clamp(3.25rem,10vw,6.75rem)] font-bold leading-[0.9] tracking-tight">
+            <span className="relative inline-block pb-6">
+              <span className="text-gradient">
+                {profile.name}
+              </span>
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 240 18"
+                className="absolute bottom-0 left-0 h-4 w-[min(100%,15rem)] text-[var(--accent-orange)]"
+                fill="none"
+              >
+                <path
+                  d="M4 12C38 5 72 15 108 9s71-2 126-6"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeWidth="3"
+                />
+              </svg>
+            </span>
+          </h1>
+          <p className="mt-6 max-w-xl text-pretty text-base leading-relaxed text-[var(--muted)] sm:text-lg">
+            {profile.headline}
+          </p>
+          <p className="mt-5 max-w-xl text-sm leading-7 text-white/75">
+            {profile.roles.join(" · ")}
+          </p>
+        </Reveal>
 
-      {/* Name */}
-      <m.h1
-        initial={reduce ? { opacity: 0 } : { opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 0.1, ease }}
-        className="max-w-full text-balance px-2 text-[clamp(2.5rem,11vw,4.5rem)] font-bold leading-[0.98] tracking-tight sm:px-0 sm:text-7xl md:text-8xl"
-      >
-        <span className="text-gradient">{profile.name}</span>
-      </m.h1>
+        <Reveal delay={0.16}>
+          <label className="mt-8 flex max-w-xl items-center gap-3 rounded-xl border border-dashed border-[var(--accent-orange)]/45 bg-white/[0.035] px-4 py-3 text-sm shadow-inner shadow-black/10">
+            <span className="shrink-0 font-mono text-xs uppercase tracking-[0.18em] text-[var(--accent-orange)]">
+              now:
+            </span>
+            <input
+              aria-label="Current focus"
+              defaultValue="Learning Next.js, backend development, and machine learning."
+              className="min-w-0 flex-1 border-0 bg-transparent text-white/80 outline-none placeholder:text-white/40"
+            />
+          </label>
+        </Reveal>
 
-      {/* Rotating roles */}
-      <m.div
-        initial={reduce ? { opacity: 0 } : { opacity: 0, y: 18 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 0.2, ease }}
-        className="mt-5 flex min-h-8 max-w-full items-center justify-center overflow-hidden px-2"
-      >
-        <RoleRotator roles={profile.roles} reduce={reduce === true} />
-      </m.div>
+        <Reveal delay={0.24}>
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <a
+              href="#projects"
+              className="gradient-button inline-flex items-center justify-center rounded-lg px-5 py-3 text-sm font-semibold text-[var(--background)] transition-transform hover:-translate-y-0.5"
+            >
+              View projects
+            </a>
+            <a
+              href="#contact"
+              className="inline-flex items-center justify-center rounded-lg border border-white/15 px-5 py-3 text-sm font-semibold text-white/85 hover:border-[var(--accent-orange)]/60 hover:text-white"
+            >
+              Contact me
+            </a>
+          </div>
+          <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-[var(--muted)]">
+            <a
+              href={profile.github}
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-white"
+            >
+              GitHub ↗
+            </a>
+            <a href="#contact" className="hover:text-white">
+              Email
+            </a>
+          </div>
+        </Reveal>
+      </div>
 
-      {/* Headline */}
-      <m.p
-        initial={reduce ? { opacity: 0 } : { opacity: 0, y: 18 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 0.3, ease }}
-        className="mt-6 max-w-2xl text-pretty text-base leading-relaxed text-[var(--muted)] sm:text-lg"
-      >
-        {profile.headline}
-      </m.p>
-
-      {/* CTAs */}
-      <m.div
-        initial={reduce ? { opacity: 0 } : { opacity: 0, y: 18 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 0.4, ease }}
-        className="mt-10 flex w-full max-w-xs flex-col items-stretch gap-3 sm:w-auto sm:max-w-none sm:flex-row sm:items-center"
-      >
-        <a
-          href="#projects"
-          className="group inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-fuchsia-500 via-purple-500 to-indigo-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-fuchsia-500/30 transition-transform hover:scale-105"
-        >
-          View my work
-          <span className="transition-transform group-hover:translate-x-1">→</span>
-        </a>
-        <a
-          href="#contact"
-          className="inline-flex items-center justify-center gap-2 rounded-xl glass px-6 py-3 text-sm font-semibold transition-colors hover:bg-white/10"
-        >
-          Contact me
-        </a>
-      </m.div>
-
-      {/* Social row */}
-      <m.div
-        initial={reduce ? { opacity: 0 } : { opacity: 0, y: 18 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 0.5, ease }}
-        className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-[var(--muted)] sm:mt-12"
-      >
-        <a
-          href={profile.github}
-          target="_blank"
-          rel="noreferrer"
-          className="transition-colors hover:text-white"
-        >
-          GitHub ↗
-        </a>
-        <a
-          href={`mailto:${profile.email}`}
-          className="transition-colors hover:text-white"
-        >
-          Email ↗
-        </a>
-      </m.div>
-
-      {/* Scroll cue */}
-      <m.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2 }}
-        className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 sm:block"
-      >
-        <m.div
-          animate={reduce ? {} : { y: [0, 8, 0] }}
-          transition={{ duration: 1.8, repeat: Infinity }}
-          className="flex h-9 w-5 items-start justify-center rounded-full border border-white/20 p-1"
-        >
-          <span className="h-2 w-1 rounded-full bg-white/60" />
-        </m.div>
-      </m.div>
+      <Reveal className="order-1 flex justify-center lg:order-2 lg:justify-end" delay={0.12}>
+        <figure className="relative w-[min(70vw,22rem)] rotate-[-4deg]">
+          <div className="absolute -inset-4 rounded-[2rem] border border-[var(--accent-orange)]/25" />
+          <div className="relative overflow-hidden rounded-[1.75rem] border border-white/15 bg-[var(--card-fill)] p-2 shadow-2xl shadow-black/35">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-[1.25rem] bg-[var(--background)]">
+              <Image
+                src="/profile.webp"
+                alt={`${profile.name}, ${profile.roles[0]}`}
+                fill
+                priority
+                sizes="(min-width: 1024px) 352px, 70vw"
+                className="object-cover grayscale contrast-125 saturate-50"
+              />
+              <div className="absolute inset-0 bg-[var(--accent-orange)]/20 mix-blend-color" />
+              <div className="absolute inset-0 bg-[var(--accent-teal)]/15 mix-blend-screen" />
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 opacity-70 mix-blend-soft-light"
+                style={{ backgroundImage: "var(--noise-tile)" }}
+              />
+            </div>
+          </div>
+          <figcaption className="mt-5 flex items-center justify-between px-1 text-[0.68rem] font-mono uppercase tracking-[0.18em] text-[var(--muted)]">
+            <span>Profile photo</span>
+            <span>01 / 01</span>
+          </figcaption>
+        </figure>
+      </Reveal>
     </section>
   );
 }
 
-/* Cycles through role strings with a vertical slide */
-function RoleRotator({ roles, reduce }: { roles: string[]; reduce: boolean }) {
-  const [idx, setIdx] = useState(0);
-  useEffect(() => {
-    if (reduce || roles.length < 2) return;
+function LocalTimeChip() {
+  const [time, setTime] = useState("");
 
-    const t = setInterval(() => setIdx((i) => (i + 1) % roles.length), 2800);
-    return () => clearInterval(t);
-  }, [reduce, roles.length]);
+  useEffect(() => {
+    const formatter = new Intl.DateTimeFormat("en-IN", {
+      timeZone: "Asia/Kolkata",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+
+    const updateTime = () => setTime(formatter.format(new Date()));
+    updateTime();
+    const interval = window.setInterval(updateTime, 60_000);
+
+    return () => window.clearInterval(interval);
+  }, []);
 
   return (
-    <div className="relative flex min-h-8 max-w-full items-center justify-center overflow-hidden">
-      <AnimatePresence mode="wait">
-        <m.span
-          key={idx}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.4, ease }}
-          className="max-w-full text-center text-base font-semibold leading-7 text-white/90 sm:text-xl"
-        >
-          {roles[idx]}
-        </m.span>
-      </AnimatePresence>
+    <div
+      className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-[var(--muted)]"
+      aria-label={`${profile.location}, local time`}
+    >
+      <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-[var(--accent-teal)]" />
+      <span>Bangalore, {time || "local time"}</span>
     </div>
   );
 }

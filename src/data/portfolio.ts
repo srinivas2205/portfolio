@@ -11,7 +11,7 @@ export const profile = {
     "AI & Machine Learning Enthusiast",
   ],
   headline:
-    "Building modern web applications and exploring AI, machine learning, and interactive user experiences.",
+    "I am studying computer applications and building my skills in web development, AI, and machine learning.",
   location: "Bangalore, Karnataka, India",
   email: "srinivasml507@gmail.com",
   phone: "+91 63608 65531",
@@ -23,12 +23,13 @@ export const profile = {
 };
 
 export const about = {
-  text: "I'm a BCA student passionate about creating modern, interactive web experiences. I enjoy learning new technologies, solving problems, and building projects that combine beautiful design with functionality. Alongside web development, I'm exploring artificial intelligence and machine learning while improving my software development skills.",
+  text: "I am a BCA student in Bangalore. I am learning full stack development while exploring artificial intelligence and machine learning. I use this portfolio to keep track of what I know and what I am learning.",
 };
 
 export const education = {
   degree: "Bachelor of Computer Applications (BCA)",
-  semester: "2nd Semester",
+  college: "[College name]",
+  graduationYear: "[Graduation year]",
   location: "Bangalore, Karnataka, India",
 };
 
@@ -46,11 +47,11 @@ export const interests = [
 ];
 
 export const hobbies = [
-  { label: "Bike Riding", icon: "🏍️" },
-  { label: "Photography", icon: "📷" },
-  { label: "Video Editing", icon: "🎬" },
-  { label: "Traveling", icon: "✈️" },
-  { label: "Exploring Technology", icon: "🔭" },
+  { label: "Bike Riding" },
+  { label: "Photography" },
+  { label: "Video Editing" },
+  { label: "Traveling" },
+  { label: "Exploring Technology" },
 ];
 
 export const languages = [
@@ -64,14 +65,12 @@ export const languages = [
 
 export type SkillGroup = {
   category: string;
-  accent: string; // tailwind gradient classes
   items: { name: string; learning?: boolean }[];
 };
 
 export const skills: SkillGroup[] = [
   {
     category: "Languages",
-    accent: "from-fuchsia-500 to-pink-500",
     items: [
       { name: "JavaScript" },
       { name: "TypeScript", learning: true },
@@ -84,27 +83,33 @@ export const skills: SkillGroup[] = [
   },
   {
     category: "Frontend",
-    accent: "from-violet-500 to-indigo-500",
     items: [
-      { name: "React" },
-      { name: "Next.js" },
+      { name: "React", learning: true },
+      { name: "Next.js", learning: true },
       { name: "Tailwind CSS" },
-      { name: "Framer Motion" },
+      { name: "Framer Motion", learning: true },
+      { name: "Three.js", learning: true },
     ],
   },
   {
     category: "Backend",
-    accent: "from-sky-500 to-cyan-500",
-    items: [{ name: "Node.js" }, { name: "Express.js", learning: true }],
+    items: [
+      { name: "Node.js" },
+      { name: "Express.js", learning: true },
+      { name: "Backend Development", learning: true },
+    ],
   },
   {
-    category: "Database",
-    accent: "from-emerald-500 to-teal-500",
-    items: [{ name: "MongoDB" }, { name: "SQL" }],
+    category: "Data",
+    items: [
+      { name: "MongoDB" },
+      { name: "SQL" },
+      { name: "Data Structures & Algorithms", learning: true },
+      { name: "Machine Learning", learning: true },
+    ],
   },
   {
     category: "Tools",
-    accent: "from-amber-500 to-orange-500",
     items: [
       { name: "Git" },
       { name: "GitHub" },
@@ -116,45 +121,36 @@ export const skills: SkillGroup[] = [
   },
 ];
 
-export const currentlyLearning = [
-  "Next.js",
-  "React",
-  "Three.js",
-  "Framer Motion",
-  "Data Structures & Algorithms",
-  "Machine Learning",
-  "Backend Development",
-];
-
-/**
- * Projects — intentionally a placeholder for now.
- * Add real entries with the shape below when ready.
- */
-export type Project = {
+export type ProjectPlaceholder = {
+  id: string;
   title: string;
-  description: string;
-  tags: string[];
-  link?: string;
-  repo?: string;
-  status: "planned" | "in-progress" | "shipped";
+  summary: string;
+  stack: string[];
+  screenshotLabel: string;
 };
 
-export const projects: Project[] = [
-  // {
-  //   title: "Project name",
-  //   description: "Short description of what it does and what you learned.",
-  //   tags: ["Next.js", "TypeScript"],
-  //   link: "https://...",
-  //   repo: "https://github.com/...",
-  //   status: "shipped",
-  // },
-];
-
-export const projectPipeline = [
-  { title: "Interactive Personal Portfolio", status: "In Progress" },
-  { title: "AI & ML College Projects", status: "Planned" },
-  { title: "Java & Data Structure Programs", status: "Ongoing" },
-  { title: "Web Development Practice Projects", status: "Ongoing" },
+export const projectPlaceholders: ProjectPlaceholder[] = [
+  {
+    id: "todo-01",
+    title: "Add project name",
+    summary: "Add a one-line summary here.",
+    stack: ["Add stack"],
+    screenshotLabel: "Screenshot placeholder",
+  },
+  {
+    id: "todo-02",
+    title: "Add project name",
+    summary: "Add a one-line summary here.",
+    stack: ["Add stack"],
+    screenshotLabel: "Screenshot placeholder",
+  },
+  {
+    id: "todo-03",
+    title: "Add project name",
+    summary: "Add a one-line summary here.",
+    stack: ["Add stack"],
+    screenshotLabel: "Screenshot placeholder",
+  },
 ];
 
 export const goals = [
@@ -168,8 +164,7 @@ export const goals = [
 export const navLinks = [
   { label: "About", href: "#about" },
   { label: "Skills", href: "#skills" },
-  { label: "Learning", href: "#learning" },
   { label: "Projects", href: "#projects" },
-  { label: "Interests", href: "#interests" },
+  { label: "Beyond code", href: "#interests" },
   { label: "Contact", href: "#contact" },
 ];

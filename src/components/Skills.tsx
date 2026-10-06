@@ -1,64 +1,70 @@
-"use client";
-
-import { Section, SectionHeader, StaggerGroup, staggerItem } from "./Primitives";
-import { m } from "framer-motion";
+import GlassCard from "./GlassCard";
+import { Section, SectionHeader, Reveal } from "./Primitives";
 import { skills } from "@/data/portfolio";
 
 export default function Skills() {
   return (
     <Section id="skills">
       <SectionHeader
-        eyebrow="02 — Skills"
+        eyebrow="02 / Skills"
         title={
           <>
-            My <span className="text-gradient">toolbox</span>
+            The tools on my <em>desk</em>
           </>
         }
-        subtitle="The languages, frameworks, and tools I work with — and the ones I'm actively leveling up."
+        subtitle="A single working list. The small learning tag shows where I am spending time right now."
       />
 
-      <StaggerGroup className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {skills.map((group) => (
-          <m.div
-            key={group.category}
-            variants={staggerItem}
-            whileHover={{ y: -6 }}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            className="glass group relative overflow-hidden rounded-3xl p-6"
-          >
-            {/* gradient glow on hover */}
-            <div
-              className={`pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-gradient-to-br ${group.accent} opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-40`}
-            />
-
-            <div className="mb-5 flex items-center gap-3">
-              <span
-                className={`h-2.5 w-2.5 rounded-full bg-gradient-to-br ${group.accent}`}
-              />
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-white/90">
-                {group.category}
-              </h3>
-            </div>
-
-            <ul className="flex flex-wrap gap-2">
-              {group.items.map((item) => (
-                <li key={item.name}>
-                  <span
-                    className={`inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-sm text-white/85 transition-colors hover:border-white/25 hover:bg-white/10`}
-                  >
-                    {item.name}
-                    {item.learning && (
-                      <span className="rounded bg-amber-400/20 px-1.5 py-0.5 text-[0.6rem] font-semibold uppercase tracking-wide text-amber-300">
-                        learning
-                      </span>
-                    )}
-                  </span>
-                </li>
+      <div className="grid gap-8 lg:grid-cols-[1.25fr_0.75fr] lg:items-start">
+        <Reveal>
+          <GlassCard className="rounded-[1.75rem] p-6 sm:p-9">
+            <div className="divide-y divide-white/10">
+              {skills.map((group) => (
+                <div
+                  key={group.category}
+                  className="grid gap-4 py-6 first:pt-0 last:pb-0 sm:grid-cols-[9rem_1fr] sm:gap-8"
+                >
+                  <p className="eyebrow pt-1 text-[var(--muted)]">{group.category}</p>
+                  <ul className="flex flex-wrap gap-2">
+                    {group.items.map((item) => (
+                      <li key={item.name}>
+                        <span className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white/85">
+                          {item.name}
+                          {item.learning && <LearningTag />}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               ))}
-            </ul>
-          </m.div>
-        ))}
-      </StaggerGroup>
+            </div>
+          </GlassCard>
+        </Reveal>
+
+        <Reveal delay={0.1} className="lg:pt-16">
+          <aside className="border-l border-[var(--ember)]/45 pl-6 sm:pl-8">
+            <p className="eyebrow text-[var(--ember)]">Current focus</p>
+            <h3 className="mt-4 text-3xl font-semibold leading-tight text-white">
+              Learning by making small things.
+            </h3>
+            <p className="mt-4 max-w-sm text-sm leading-7 text-[var(--muted)]">
+              I am working through Next.js, backend development, data structures,
+              machine learning, and the details that make a useful interface feel clear.
+            </p>
+            <p className="mt-8 font-mono text-xs uppercase tracking-[0.16em] text-[var(--muted)]">
+              Tag = learning
+            </p>
+          </aside>
+        </Reveal>
+      </div>
     </Section>
+  );
+}
+
+function LearningTag() {
+  return (
+    <span className="rounded border border-[var(--ember)]/40 px-1.5 py-0.5 font-mono text-[0.58rem] uppercase tracking-[0.12em] text-[var(--amber)]">
+      learning
+    </span>
   );
 }
