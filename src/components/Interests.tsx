@@ -12,32 +12,32 @@ const collageItems: Array<{
   {
     label: hobbies[0].label,
     src: "/interests/bike-riding.webp",
-    className: "min-h-[16rem] sm:row-span-2",
-    tone: "border-[var(--ember)]/45 bg-[var(--ember)]/[0.08]",
+    className: "min-h-[16rem]",
+    tone: "border-[var(--border-strong)] bg-[var(--surface-muted)]",
   },
   {
     label: hobbies[1].label,
     src: "/interests/photography.webp",
-    className: "min-h-[8rem]",
-    tone: "border-[var(--amber)]/40 bg-[var(--amber)]/[0.07]",
+    className: "min-h-[16rem]",
+    tone: "border-[var(--border-strong)] bg-[var(--surface-muted)]",
   },
   {
     label: hobbies[2].label,
     src: "/interests/video-editing.webp",
-    className: "min-h-[8rem]",
-    tone: "border-[var(--rose)]/40 bg-[var(--rose)]/[0.07]",
+    className: "min-h-[16rem]",
+    tone: "border-[var(--border-strong)] bg-[var(--surface-muted)]",
   },
   {
     label: hobbies[3].label,
     src: "/interests/traveling.webp",
-    className: "min-h-[8rem]",
-    tone: "border-white/20 bg-white/[0.03]",
+    className: "min-h-[16rem]",
+    tone: "border-[var(--border-strong)] bg-[var(--surface-muted)]",
   },
   {
     label: hobbies[4].label,
     src: "/interests/exploring-technology.webp",
-    className: "min-h-[8rem]",
-    tone: "border-white/20 bg-white/[0.03]",
+    className: "min-h-[16rem]",
+    tone: "border-[var(--border-strong)] bg-[var(--surface-muted)]",
   },
 ];
 
@@ -57,7 +57,7 @@ export default function Interests() {
       <div className="grid gap-5 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
         <Reveal>
           <GlassCard className="rounded-[1.75rem] p-4 sm:p-6">
-            <div className="grid gap-3 sm:grid-cols-2 sm:grid-rows-3">
+            <div className="grid gap-3 sm:grid-cols-2">
               {collageItems.map((item, index) => (
                 <PhotoPlaceholder
                   key={item.label}
@@ -131,14 +131,8 @@ function PhotoPlaceholder({
           className="object-cover saturate-[0.8]"
         />
       )}
-      {src && <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />}
-      <div className="absolute inset-0 opacity-30 [background-image:linear-gradient(to_right,rgb(244_236_225_/_0.16)_1px,transparent_1px),linear-gradient(to_bottom,rgb(244_236_225_/_0.16)_1px,transparent_1px)] [background-size:1.5rem_1.5rem]" />
-      <div className="absolute -right-10 -top-10 h-28 w-28 rounded-full border border-white/15" />
-      <div className="absolute bottom-5 left-5 right-5">
-        <span className="inline-flex rounded-full border border-dashed border-white/25 bg-black/20 px-2.5 py-1 font-mono text-[0.58rem] uppercase tracking-[0.14em] text-[var(--muted)]">
-          CSS photo placeholder
-        </span>
-        <div className="mt-3 flex items-end justify-between gap-3">
+      <div className="photo-caption absolute inset-x-0 bottom-0 p-5">
+        <div className="flex items-end justify-between gap-3">
           <h3 className="text-xl font-semibold text-white">{label}</h3>
           <span className="font-mono text-xs text-white/45">0{index + 1}</span>
         </div>

@@ -19,23 +19,8 @@ export default function Hero() {
         <Reveal delay={0.08}>
           <p className="mt-7 eyebrow text-[var(--accent-orange)]">BCA student / developer in progress</p>
           <h1 className="mt-4 max-w-3xl text-balance text-[clamp(3.25rem,10vw,6.75rem)] font-bold leading-[0.9] tracking-tight">
-            <span className="relative inline-block pb-6">
-              <span className="text-gradient">
-                {profile.name}
-              </span>
-              <svg
-                aria-hidden="true"
-                viewBox="0 0 240 18"
-                className="absolute bottom-0 left-0 h-4 w-[min(100%,15rem)] text-[var(--accent-orange)]"
-                fill="none"
-              >
-                <path
-                  d="M4 12C38 5 72 15 108 9s71-2 126-6"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeWidth="3"
-                />
-              </svg>
+            <span className="inline-block">
+              {profile.name}
             </span>
           </h1>
           <p className="mt-6 max-w-xl text-pretty text-base leading-relaxed text-[var(--muted)] sm:text-lg">
@@ -63,7 +48,7 @@ export default function Hero() {
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <a
               href="#projects"
-              className="gradient-button inline-flex items-center justify-center rounded-lg px-5 py-3 text-sm font-semibold text-[var(--background)] transition-transform hover:-translate-y-0.5"
+              className="primary-button inline-flex items-center justify-center rounded-lg px-5 py-3 text-sm font-semibold transition-transform hover:-translate-y-0.5"
             >
               View projects
             </a>
@@ -91,10 +76,9 @@ export default function Hero() {
       </div>
 
       <Reveal className="order-1 flex justify-center lg:order-2 lg:justify-end" delay={0.12}>
-        <figure className="relative w-[min(70vw,22rem)] rotate-[-4deg]">
-          <div className="absolute -inset-4 rounded-[2rem] border border-[var(--accent-orange)]/25" />
-          <div className="relative overflow-hidden rounded-[1.75rem] border border-white/15 bg-[var(--card-fill)] p-2 shadow-2xl shadow-black/35">
-            <div className="relative aspect-[4/5] overflow-hidden rounded-[1.25rem] bg-[var(--background)]">
+        <figure className="relative w-[min(70vw,22rem)]">
+          <div className="relative overflow-hidden rounded-2xl border border-[var(--border-strong)] bg-[var(--surface)] p-2 shadow-xl shadow-black/20">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-[var(--background)]">
               <Image
                 src="/profile.webp"
                 alt={`${profile.name}, ${profile.roles[0]}`}
@@ -102,13 +86,6 @@ export default function Hero() {
                 priority
                 sizes="(min-width: 1024px) 352px, 70vw"
                 className="object-cover grayscale contrast-125 saturate-50"
-              />
-              <div className="absolute inset-0 bg-[var(--accent-orange)]/20 mix-blend-color" />
-              <div className="absolute inset-0 bg-[var(--accent-teal)]/15 mix-blend-screen" />
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0 opacity-70 mix-blend-soft-light"
-                style={{ backgroundImage: "var(--noise-tile)" }}
               />
             </div>
           </div>
@@ -145,7 +122,7 @@ function LocalTimeChip() {
       className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-[var(--muted)]"
       aria-label={`${profile.location}, local time`}
     >
-      <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-[var(--accent-teal)]" />
+      <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-[var(--accent-orange)]" />
       <span>Bangalore, {time || "local time"}</span>
     </div>
   );

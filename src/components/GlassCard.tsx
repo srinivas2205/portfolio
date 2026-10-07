@@ -5,8 +5,7 @@ type GlassCardProps = HTMLAttributes<HTMLDivElement> & {
 };
 
 /**
- * Server-rendered signature card. MotionEffects owns the single delegated
- * pointer listener so every card stays cheap to render and hydrate.
+ * Server-rendered card surface shared by the content sections.
  */
 export default function GlassCard({ className, children, ...props }: GlassCardProps) {
   return (

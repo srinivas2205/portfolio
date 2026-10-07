@@ -39,12 +39,9 @@ function ProjectCard({
 }) {
   return (
     <GlassCard className="flex h-full min-h-[24rem] flex-col rounded-[1.75rem] p-4 sm:p-6">
-      <div className="project-screenshot relative flex min-h-44 items-end overflow-hidden rounded-[1.25rem] border border-white/10 bg-[var(--background-soft)] p-4 sm:min-h-52">
-        <div className="absolute inset-0 opacity-40 [background-image:linear-gradient(to_right,rgb(244_236_225_/_0.12)_1px,transparent_1px),linear-gradient(to_bottom,rgb(244_236_225_/_0.12)_1px,transparent_1px)] [background-size:1.75rem_1.75rem]" />
-        <div className="absolute right-5 top-5 h-20 w-28 rotate-3 rounded-lg border border-[var(--amber)]/35 bg-[var(--ember)]/10" />
-        <div className="absolute bottom-5 left-5 h-12 w-32 -rotate-2 rounded-lg border border-[var(--rose)]/35 bg-[var(--rose)]/10" />
-        <div className="relative z-10 flex w-full items-end justify-between gap-4">
-          <span className="rounded-full border border-dashed border-white/25 bg-black/20 px-2.5 py-1 font-mono text-[0.58rem] uppercase tracking-[0.14em] text-[var(--muted)]">
+      <div className="project-screenshot relative flex min-h-44 items-end overflow-hidden rounded-xl border border-[var(--border-strong)] bg-[var(--surface-muted)] p-4 sm:min-h-52">
+        <div className="relative flex w-full items-end justify-between gap-4">
+          <span className="rounded-md border border-dashed border-[var(--border-strong)] bg-[var(--surface)] px-2.5 py-1 font-mono text-[0.58rem] uppercase tracking-[0.14em] text-[var(--muted)]">
             {project.screenshotLabel}
           </span>
           <span className="font-mono text-xs text-white/45">0{index + 1}</span>

@@ -14,7 +14,7 @@ export default function NotFound() {
         </p>
         <Link
           href="/"
-          className="gradient-button mt-8 inline-flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold text-[var(--background)] transition-transform hover:scale-[1.02]"
+          className="primary-button mt-8 inline-flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-transform hover:scale-[1.02]"
         >
           Return home <span aria-hidden="true">→</span>
         </Link>

@@ -21,24 +21,8 @@ export default function Navbar() {
   const { scrollY } = useScroll();
   const prefersReducedMotion = useReducedMotion();
 
-  // Keep the SVG displacement filter opt-in. The plain blur declaration below
-  // must remain valid in every browser, including Safari and Firefox.
-  useEffect(() => {
-    const browser = navigator as Navigator & {
-      userAgentData?: { brands?: Array<{ brand: string }> };
-    };
-    const brands = browser.userAgentData?.brands ?? [];
-    const isChromium = brands.length
-      ? brands.some(({ brand }) => /Chromium|Chrome|Edg|OPR|Brave/i.test(brand))
-      : /Chrome|Chromium|Edg\/|OPR\//i.test(navigator.userAgent);
-
-    document.documentElement.classList.toggle("chromium", isChromium);
-
-    return () => document.documentElement.classList.remove("chromium");
-  }, []);
-
   // Keep the active lens aligned with the rendered link after scroll, font
-  // loading, and viewport changes. The glass itself remains untouched.
+  // loading, and viewport changes. The navigation surface stays static.
   useEffect(() => {
     let disposed = false;
     let frame: number | null = null;
@@ -118,8 +102,8 @@ export default function Navbar() {
     return () => observer.disconnect();
   }, []);
 
-  // The mobile menu is part of the same glass pill, so Escape only needs to
-  // close it and return focus to the hamburger.
+  // The mobile menu is part of the same navigation surface, so Escape only
+  // needs to close it and return focus to the hamburger.
   useEffect(() => {
     if (!open) return;
 
@@ -140,27 +124,6 @@ export default function Navbar() {
 
   return (
     <>
-      <svg aria-hidden="true" className="lg-filter-defs" focusable="false">
-        <defs>
-          <filter id="liquid-glass" x="-20%" y="-20%" width="140%" height="140%">
-            <feTurbulence
-              type="fractalNoise"
-              baseFrequency="0.012"
-              numOctaves={2}
-              seed={7}
-              result="liquid-noise"
-            />
-            <feGaussianBlur in="liquid-noise" stdDeviation="2" result="liquid-blur" />
-            <feDisplacementMap
-              in="SourceGraphic"
-              in2="liquid-blur"
-              scale={48}
-              xChannelSelector="R"
-              yChannelSelector="G"
-            />
-          </filter>
-        </defs>
-      </svg>
       <header
         role="navigation"
         aria-label="Primary navigation"
@@ -169,7 +132,6 @@ export default function Navbar() {
         className="lg-nav navbar-header"
       >
         <span aria-hidden="true" className="lg-glass" />
-        <span aria-hidden="true" className="lg-sheen" />
         <div className="lg-bar">
           <a
             href="#top"
@@ -178,7 +140,7 @@ export default function Navbar() {
           >
             <span className="lg-avatar relative block h-9 w-9 overflow-hidden rounded-full transition-transform group-hover:scale-110">
               <Image
-                src="/profile.webp"
+                src="/navbar-profile.jpeg"
                 alt={profile.name}
                 fill
                 sizes="36px"
@@ -236,22 +198,10 @@ export default function Navbar() {
             onClick={() => setOpen((value) => !value)}
             className="navbar-control lg-menu-button lg-burger h-10 w-10 place-items-center rounded-xl"
           >
-            <div aria-hidden="true" className="space-y-1.5">
-              <m.span
-                animate={open ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
-                transition={{ duration: prefersReducedMotion ? 0 : 0.2 }}
-                className="block h-0.5 w-5 rounded bg-white"
-              />
-              <m.span
-                animate={open ? { opacity: 0 } : { opacity: 1 }}
-                transition={{ duration: prefersReducedMotion ? 0 : 0.15 }}
-                className="block h-0.5 w-5 rounded bg-white"
-              />
-              <m.span
-                animate={open ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
-                transition={{ duration: prefersReducedMotion ? 0 : 0.2 }}
-                className="block h-0.5 w-5 rounded bg-white"
-              />
+            <div aria-hidden="true" className="lg-menu-icon">
+              <span className="lg-menu-line lg-menu-line-top" />
+              <span className="lg-menu-line lg-menu-line-middle" />
+              <span className="lg-menu-line lg-menu-line-bottom" />
             </div>
           </button>
         </div>

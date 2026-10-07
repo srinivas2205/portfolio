@@ -1,4 +1,3 @@
-import Background from "@/components/Background";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
@@ -15,7 +14,6 @@ export default function Home() {
     <LazyMotion features={domAnimation}>
       <MotionConfig reducedMotion="user">
         <MotionEffects />
-        <Background />
         <Navbar />
         <main className="flex-1">
           <Hero />

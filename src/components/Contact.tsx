@@ -80,7 +80,7 @@ export default function Contact() {
 
             <button
               type="submit"
-              className="gradient-button inline-flex items-center justify-center rounded-lg px-6 py-3 text-sm font-semibold text-[var(--background)] transition-transform hover:-translate-y-0.5"
+              className="primary-button inline-flex items-center justify-center rounded-lg px-6 py-3 text-sm font-semibold transition-transform hover:-translate-y-0.5"
             >
               Send message
             </button>
