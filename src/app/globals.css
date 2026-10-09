@@ -443,6 +443,20 @@ footer {
   transform: scale(0.98);
 }
 
+/* Keep the glass treatment, but avoid making touch devices blur large areas
+   of the page on every scroll frame. Desktop keeps the full-strength effect. */
+@media (pointer: coarse), (max-width: 767px) {
+  .lg-glass {
+    -webkit-backdrop-filter: blur(14px) saturate(145%);
+    backdrop-filter: blur(14px) saturate(145%);
+  }
+
+  .glass-card {
+    -webkit-backdrop-filter: blur(12px) saturate(135%);
+    backdrop-filter: blur(12px) saturate(135%);
+  }
+}
+
 /* Shared responsive primitives. Motion is limited to opacity and transform. */
 .section-shell {
   padding-inline: var(--page-gutter);
@@ -464,6 +478,188 @@ footer {
   max-width: 65ch;
   font-size: clamp(1rem, 1.5vw, 1.125rem);
   line-height: 1.7;
+}
+
+/* Editorial hero: oversized type, a quiet outline line, and a centered portrait. */
+.hero-editorial {
+  position: relative;
+  isolation: isolate;
+  min-height: 100svh;
+  width: 100%;
+  max-width: 90rem;
+  margin-inline: auto;
+  padding: 7.5rem var(--page-gutter) 4.5rem;
+  overflow: hidden;
+}
+
+.hero-editorial__topline {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.hero-editorial__greeting {
+  max-width: 38rem;
+  color: var(--foreground);
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 2.4vw, 1.9rem);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+.hero-editorial__greeting strong {
+  color: var(--accent-orange);
+  font-weight: 600;
+}
+
+.hero-editorial__title {
+  position: relative;
+  z-index: 1;
+  margin: clamp(2.75rem, 8vw, 6rem) 0 0;
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: clamp(4.25rem, 14.5vw, 12.5rem);
+  font-weight: 900;
+  letter-spacing: -0.105em;
+  line-height: 0.76;
+  text-align: center;
+  text-wrap: balance;
+  text-transform: uppercase;
+}
+
+.hero-editorial__title-line {
+  display: block;
+}
+
+.hero-editorial__title-line--outline {
+  color: transparent;
+  -webkit-text-stroke: 1px rgb(245 245 245 / 0.65);
+  text-stroke: 1px rgb(245 245 245 / 0.65);
+}
+
+.hero-editorial__stage {
+  position: relative;
+  z-index: 2;
+  min-height: clamp(25rem, 59vw, 43rem);
+  margin-top: clamp(-4rem, -5vw, -1.5rem);
+}
+
+.hero-editorial__location {
+  position: absolute;
+  top: clamp(5rem, 11vw, 9rem);
+  left: 0;
+  max-width: 13rem;
+  color: var(--muted);
+  font-size: clamp(0.85rem, 1.5vw, 1.1rem);
+  line-height: 1.45;
+}
+
+.hero-editorial__stage-rule {
+  position: absolute;
+  top: calc(clamp(5rem, 11vw, 9rem) + 2.5rem);
+  left: 0;
+  width: clamp(3rem, 8vw, 7rem);
+  height: 1px;
+  background: var(--accent-orange);
+}
+
+.hero-editorial__portrait-reveal {
+  position: absolute;
+  inset: auto 0 clamp(1.5rem, 3vw, 2.75rem);
+  display: flex;
+  justify-content: center;
+}
+
+.hero-editorial__portrait {
+  position: relative;
+  width: min(88vw, 36rem);
+  margin: 0;
+}
+
+.hero-editorial__portrait-frame {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: visible;
+}
+
+.hero-editorial__portrait-image {
+  object-fit: contain;
+  object-position: center bottom;
+  filter: grayscale(1) contrast(1.14) brightness(1.05);
+  transform: scale(1.08);
+  transform-origin: center bottom;
+}
+
+.hero-editorial__portrait-caption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.85rem;
+  padding-inline: 0.2rem;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.hero-editorial__side-note {
+  position: absolute;
+  top: clamp(1.5rem, 4vw, 3.5rem);
+  left: 0;
+  width: min(14rem, 25%);
+  padding-left: 1rem;
+  border-left: 1px solid var(--border-strong);
+}
+
+.hero-editorial__side-note p {
+  margin-top: 0.65rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+
+.hero-editorial__content {
+  position: relative;
+  z-index: 4;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 2rem;
+  margin-top: clamp(1rem, 3vw, 2rem);
+}
+
+.hero-editorial__headline {
+  max-width: 30rem;
+  color: var(--muted);
+  font-size: clamp(1rem, 1.5vw, 1.15rem);
+  line-height: 1.65;
+}
+
+.hero-editorial__focus {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  max-width: 32rem;
+  margin-top: 1.5rem;
+  padding: 0.8rem 1rem;
+  border: 1px dashed rgb(224 122 79 / 0.45);
+  border-radius: 0.75rem;
+  background: rgb(255 255 255 / 0.035);
+  font-size: 0.85rem;
+}
+
+.hero-editorial__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
 }
 
 .reveal-block {
@@ -545,6 +741,66 @@ footer {
   }
 
   .lg-links { display: none; }
+
+  .hero-editorial {
+    padding-top: 7rem;
+  }
+
+  .hero-editorial__topline {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .hero-editorial__greeting {
+    max-width: 19rem;
+  }
+
+  .hero-editorial__title {
+    margin-top: 3.75rem;
+    font-size: clamp(3.35rem, 17vw, 7rem);
+    line-height: 0.8;
+    text-align: left;
+  }
+
+  .hero-editorial__stage {
+    min-height: 31rem;
+    margin-top: -1rem;
+  }
+
+  .hero-editorial__location {
+    top: 1rem;
+    max-width: 10rem;
+  }
+
+  .hero-editorial__stage-rule {
+    top: 4rem;
+  }
+
+  .hero-editorial__portrait {
+    width: min(88vw, 27rem);
+  }
+
+  .hero-editorial__side-note {
+    top: 5.5rem;
+    left: 0;
+    width: min(9rem, 30%);
+    padding-left: 0.7rem;
+  }
+
+  .hero-editorial__side-note p {
+    font-size: 0.68rem;
+  }
+
+  .hero-editorial__content {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .hero-editorial__actions {
+    align-items: flex-start;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -581,6 +837,12 @@ footer {
   }
 
   .navbar-active-lens {
+    transition: none;
+  }
+
+  .hero-editorial__portrait-frame,
+  .hero-editorial__portrait-image {
+    animation: none;
     transition: none;
   }
 

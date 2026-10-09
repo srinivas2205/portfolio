@@ -7,32 +7,61 @@ import { profile } from "@/data/portfolio";
 
 export default function Hero() {
   return (
-    <section
-      id="top"
-      className="relative mx-auto grid min-h-screen w-full max-w-6xl items-center gap-12 px-5 pt-28 pb-16 sm:px-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(18rem,0.85fr)] lg:gap-16"
-    >
-      <div className="order-2 max-w-2xl lg:order-1">
+    <section id="top" className="hero-editorial">
+      <div className="hero-editorial__topline">
         <Reveal>
           <LocalTimeChip />
         </Reveal>
-
         <Reveal delay={0.08}>
-          <p className="mt-7 eyebrow text-[var(--accent-orange)]">BCA student / developer in progress</p>
-          <h1 className="mt-4 max-w-3xl text-balance text-[clamp(3.25rem,10vw,6.75rem)] font-bold leading-[0.9] tracking-tight">
-            <span className="inline-block">
-              {profile.name}
-            </span>
-          </h1>
-          <p className="mt-6 max-w-xl text-pretty text-base leading-relaxed text-[var(--muted)] sm:text-lg">
-            {profile.headline}
-          </p>
-          <p className="mt-5 max-w-xl text-sm leading-7 text-white/75">
-            {profile.roles.join(" · ")}
+          <p className="hero-editorial__greeting">
+            👋, my name is <strong>{profile.name}</strong> and I am a
           </p>
         </Reveal>
+      </div>
 
-        <Reveal delay={0.16}>
-          <label className="mt-8 flex max-w-xl items-center gap-3 rounded-xl border border-dashed border-[var(--accent-orange)]/45 bg-white/[0.035] px-4 py-3 text-sm shadow-inner shadow-black/10">
+      <Reveal delay={0.12}>
+        <h1 className="hero-editorial__title">
+          <span className="hero-editorial__title-line">Developer</span>
+          <span className="hero-editorial__title-line hero-editorial__title-line--outline">
+            &amp; Builder
+          </span>
+        </h1>
+      </Reveal>
+
+      <div className="hero-editorial__stage">
+        <p className="hero-editorial__location">based in {profile.location}.</p>
+        <span className="hero-editorial__stage-rule" aria-hidden="true" />
+
+        <Reveal className="hero-editorial__portrait-reveal" delay={0.18}>
+          <figure className="hero-editorial__portrait">
+            <div className="hero-editorial__portrait-frame">
+              <Image
+                src="/profile-cutout.png"
+                alt={`${profile.name}, ${profile.roles[0]}`}
+                fill
+                priority
+                sizes="(min-width: 1024px) 480px, 82vw"
+                className="hero-editorial__portrait-image"
+              />
+            </div>
+            <figcaption className="hero-editorial__portrait-caption">
+              <span>Profile photo</span>
+              <span>01 / 01</span>
+            </figcaption>
+          </figure>
+        </Reveal>
+
+        <aside className="hero-editorial__side-note">
+          <span className="eyebrow text-[var(--accent-orange)]">Currently exploring</span>
+          <p>{profile.roles.join(" · ")}</p>
+        </aside>
+      </div>
+
+      <Reveal delay={0.24}>
+        <div className="hero-editorial__content">
+          <p className="hero-editorial__headline">{profile.headline}</p>
+
+          <label className="hero-editorial__focus">
             <span className="shrink-0 font-mono text-xs uppercase tracking-[0.18em] text-[var(--accent-orange)]">
               now:
             </span>
@@ -42,58 +71,32 @@ export default function Hero() {
               className="min-w-0 flex-1 border-0 bg-transparent text-white/80 outline-none placeholder:text-white/40"
             />
           </label>
-        </Reveal>
 
-        <Reveal delay={0.24}>
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <a
-              href="#projects"
-              className="primary-button inline-flex items-center justify-center rounded-lg px-5 py-3 text-sm font-semibold transition-transform hover:-translate-y-0.5"
-            >
-              View projects
-            </a>
-            <a
-              href="#contact"
-              className="inline-flex items-center justify-center rounded-lg border border-white/15 px-5 py-3 text-sm font-semibold text-white/85 hover:border-[var(--accent-orange)]/60 hover:text-white"
-            >
-              Contact me
-            </a>
-          </div>
-          <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-[var(--muted)]">
-            <a
-              href={profile.github}
-              target="_blank"
-              rel="noreferrer"
-              className="hover:text-white"
-            >
-              GitHub ↗
-            </a>
-            <a href="#contact" className="hover:text-white">
-              Email
-            </a>
-          </div>
-        </Reveal>
-      </div>
-
-      <Reveal className="order-1 flex justify-center lg:order-2 lg:justify-end" delay={0.12}>
-        <figure className="relative w-[min(70vw,22rem)]">
-          <div className="relative overflow-hidden rounded-2xl border border-[var(--border-strong)] bg-[var(--surface)] p-2 shadow-xl shadow-black/20">
-            <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-[var(--background)]">
-              <Image
-                src="/profile.webp"
-                alt={`${profile.name}, ${profile.roles[0]}`}
-                fill
-                priority
-                sizes="(min-width: 1024px) 352px, 70vw"
-                className="object-cover grayscale contrast-125 saturate-50"
-              />
+          <div className="hero-editorial__actions">
+            <div className="flex flex-wrap items-center gap-3">
+              <a
+                href="#projects"
+                className="primary-button inline-flex items-center justify-center rounded-lg px-5 py-3 text-sm font-semibold transition-transform hover:-translate-y-0.5"
+              >
+                View projects
+              </a>
+              <a
+                href="#contact"
+                className="inline-flex items-center justify-center rounded-lg border border-white/15 px-5 py-3 text-sm font-semibold text-white/85 hover:border-[var(--accent-orange)]/60 hover:text-white"
+              >
+                Contact me
+              </a>
+            </div>
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-[var(--muted)]">
+              <a href={profile.github} target="_blank" rel="noreferrer" className="hover:text-white">
+                GitHub ↗
+              </a>
+              <a href="#contact" className="hover:text-white">
+                Email
+              </a>
             </div>
           </div>
-          <figcaption className="mt-5 flex items-center justify-between px-1 text-[0.68rem] font-mono uppercase tracking-[0.18em] text-[var(--muted)]">
-            <span>Profile photo</span>
-            <span>01 / 01</span>
-          </figcaption>
-        </figure>
+        </div>
       </Reveal>
     </section>
   );

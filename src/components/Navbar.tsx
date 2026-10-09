@@ -2,23 +2,15 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import {
-  m,
-  useMotionValueEvent,
-  useReducedMotion,
-  useScroll,
-} from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import { profile, navLinks } from "@/data/portfolio";
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState<string>(navLinks[0]?.href ?? "");
-  const scrolledRef = useRef(false);
   const linksRef = useRef<HTMLUListElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
   const [lens, setLens] = useState({ left: 0, width: 0 });
-  const { scrollY } = useScroll();
   const prefersReducedMotion = useReducedMotion();
 
   // Keep the active lens aligned with the rendered link after scroll, font
@@ -76,14 +68,6 @@ export default function Navbar() {
     };
   }, [active]);
 
-  useMotionValueEvent(scrollY, "change", (v) => {
-    const nextScrolled = v > 24;
-    if (nextScrolled === scrolledRef.current) return;
-
-    scrolledRef.current = nextScrolled;
-    setScrolled(nextScrolled);
-  });
-
   // Track which section is in view
   useEffect(() => {
     const ids = navLinks.map((l) => l.href.slice(1));
@@ -128,7 +112,6 @@ export default function Navbar() {
         role="navigation"
         aria-label="Primary navigation"
         data-open={open ? "true" : "false"}
-        data-scrolled={scrolled ? "true" : "false"}
         className="lg-nav navbar-header"
       >
         <span aria-hidden="true" className="lg-glass" />
